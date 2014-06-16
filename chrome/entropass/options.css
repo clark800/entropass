@@ -26,3 +26,7 @@ input:out-of-range {
 #qrcode {
     margin: 20px;
 }
+
+#sync-data {
+    width: 600px;
+}

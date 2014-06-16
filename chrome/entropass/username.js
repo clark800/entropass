@@ -1,33 +1,56 @@
 
-// Username should already be entered when getUsername is called
-// so ignore any text fields that are empty
-// Assume that the username field comes before the password field
-// Look for special names on the input element
-// Start looking in form where current focus lies
 
 function startsWith(string, prefixes) {
     for(var i = 0; i < prefixes.length; i++) {
-        if(string.indexOf(prefixes[i]) === 0) {
+        if(string.indexOf(prefixes[i]) === 0)
             return true;
-        }
     }
     return false;
 }
 
-function getUsernameIn(root) {
+function isVisible(element) {
+    return element.offsetWidth > 0 && element.offsetHeight > 0;
+}
+
+function isCandidateField(field) {
+    var type = field.type ? field.type.toLowerCase() : 'text';
+    return (field.value && (type === 'text' || type === 'email') &&
+            isVisible(field) && !field.disabled && !field.readOnly);
+}
+
+function findUsername(inputFields) {
+    if(inputFields.length === 0)
+        return null;
+    if(inputFields.length === 1)
+        return inputFields[0].value;
     var prefixes = ['user', 'email', 'account', 'acct', 'id'];
-    var inputFields = root.querySelectorAll('input');
     for(var i = 0; i < inputFields.length; i++) {
         var name = inputFields[i].getAttribute('name');
-        if(name && startsWith(name.toLowerCase(), prefixes)) {
-            if(inputFields[i].value)
-                return inputFields[i].value;
-        }
+        if(name && startsWith(name.toLowerCase(), prefixes))
+            return inputFields[i].value;
+    }
+    return inputFields[0].value;
+}
+
+function getUsernameIn(root) {
+    var inputFields = root.querySelectorAll('input');
+    var candidatesBeforePassword = [];
+    var candidatesAfterPassword = [];
+    var beforePassword = true;
+    for(var i = 0; i < inputFields.length; i++) {
         if(inputFields[i].type.toLowerCase() === 'password') {
-            return i > 0 ? inputFields[i-1].value : null;
+            beforePassword = false;
+            continue;
+        }
+        if(isCandidateField(inputFields[i])) {
+            if(beforePassword)
+                candidatesBeforePassword.push(inputFields[i]);
+            else
+                candidatesAfterPassword.push(inputFields[i]);
         }
     }
-    return null;
+    return (findUsername(candidatesBeforePassword)
+            || findUsername(canididatesAfterPassword));
 }
 
 function getUsername() {

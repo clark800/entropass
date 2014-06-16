@@ -56,8 +56,10 @@ function loadSettings(storageKey, callback) {
     });
 }
 
-function loadAndShowSettings(storageKey, mapping) {
+function loadAndShowSettings(storageKey, mapping, callback) {
     loadSettings(storageKey, function(settings) {
         showSettings(settings, mapping);
+        if(callback)
+            callback(settings);
     });
 }

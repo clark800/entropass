@@ -98,6 +98,9 @@ function init() {
     on('save-passphrase', 'click', onSavePassphrase);
     on('save-default-password-length', 'click', onSaveDefaultPasswordLength);
     on('show-qr-code', 'click', togglePrivateKeyQRCode);
+    chrome.storage.sync.get(null, function(items) {
+        get('sync-data').value = JSON.stringify(items, null, 4);
+    });
 }
 
 window.onload = init;

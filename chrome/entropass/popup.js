@@ -1,7 +1,12 @@
 
-var SETTINGS = {domain: 'domain', passwordLength: 'password-length',
-                resetCount: 'reset-count', allowSymbols: 'allow-symbols'};
+var SETTINGS = {username: 'username', domain: 'domain',
+                passwordLength: 'password-length', resetCount: 'reset-count',
+                allowSymbols: 'allow-symbols'};
 function on(id, evt, cb) { get(id).addEventListener(evt, cb); }
+function toggle(id) {
+    var element = get(id);
+    element.style.display = element.style.display === 'none' ? '' : 'none';
+}
 
 function setClipboard(password) {
     var cmd = 'setClipboard';
@@ -110,7 +115,7 @@ function withVerifiedPassword(callback, onFail) {
 
 function onInvalidPassphrase() {
     var field = get('passphrase');
-    field.setCustomValidity('The passphrase entered is not the saved passphrase.');
+    field.setCustomValidity('Different passphrase');
     field.focus();
 }
 
@@ -124,9 +129,9 @@ function onCopyPassword() {
     event.preventDefault();
 }
 
-function loadAndShowSiteSettings(mapping) {
+function loadAndShowSiteSettings(mapping, callback) {
     withDomain(function(domain) {
-        loadAndShowSettings('site:' + domain, mapping);
+        loadAndShowSettings('site:' + domain, mapping, callback);
     });
 }
 
@@ -134,16 +139,24 @@ function onPassphraseInput() {
     get('passphrase').setCustomValidity('');
 }
 
+function loadUsername(settings) {
+    withUsername(function(username) {
+        get('username').value = username ? username : settings.username;
+        if(username && settings.username && (username !== settings.username))
+            get('username').setCustomValidity('Different username')
+    });
+}
+
 function init() {
-    withDomain(function(domain) { setValue('domain', domain); });
+    withDomain(function(domain) {setValue('domain', domain);});
     loadAndShowSettings('global', {defaultPasswordLength: 'password-length'});
-    loadAndShowSiteSettings(SETTINGS);
+    loadAndShowSiteSettings(SETTINGS, loadUsername);
     on('generate-form', 'submit', onGeneratePassword);
     on('increment-reset-count', 'click', incrementResetCount);
     on('decrement-reset-count', 'click', decrementResetCount);
     on('copy-password', 'click', onCopyPassword);
     on('passphrase', 'input', onPassphraseInput);
-    withUsername(function(username) { get('username').innerHTML = username; });
+    on('toggle-options', 'click', function() {toggle('options');});
 }
 
 window.onload = init;
