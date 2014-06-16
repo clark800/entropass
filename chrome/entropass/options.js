@@ -80,7 +80,7 @@ function onSaveDefaultPasswordLength() {
 
 function onSavePassphrase() {
     var passphrase = get('passphrase').value;
-    setValue('passphrase') = '';
+    get('passphrase').value = '';
     if(passphrase === '') {
         chrome.storage.local.remove('passphrase-hash');
     } else {

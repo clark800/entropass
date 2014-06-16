@@ -23,6 +23,11 @@ input:out-of-range {
     background: hsl(0, 50%, 90%);
 }
 
+input.warning {
+    border-color: rgb(200, 200, 180);
+    background: rgb(252, 248, 227);
+}
+
 label {
     display: inline-block;
     width: 80px;

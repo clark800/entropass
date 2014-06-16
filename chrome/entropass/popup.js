@@ -141,9 +141,9 @@ function onPassphraseInput() {
 
 function loadUsername(settings) {
     withUsername(function(username) {
-        get('username').value = username ? username : settings.username;
+        get('username').value = (username ? username : settings.username) || '';
         if(username && settings.username && (username !== settings.username))
-            get('username').setCustomValidity('Different username')
+            get('username').className += 'warning';
     });
 }
 

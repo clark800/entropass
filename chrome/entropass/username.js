@@ -13,8 +13,9 @@ function isVisible(element) {
 }
 
 function isCandidateField(field) {
+    var name = field.nodeName.toLowerCase();
     var type = field.type ? field.type.toLowerCase() : 'text';
-    return (field.value && (type === 'text' || type === 'email') &&
+    return (name === 'input' && (type === 'text' || type === 'email') &&
             isVisible(field) && !field.disabled && !field.readOnly);
 }
 
@@ -33,6 +34,8 @@ function findUsername(inputFields) {
 }
 
 function getUsernameIn(root) {
+    if(!root)
+        return null;
     var inputFields = root.querySelectorAll('input');
     var candidatesBeforePassword = [];
     var candidatesAfterPassword = [];
@@ -49,16 +52,38 @@ function getUsernameIn(root) {
                 candidatesAfterPassword.push(inputFields[i]);
         }
     }
-    return (findUsername(candidatesBeforePassword)
-            || findUsername(canididatesAfterPassword));
+    var username = findUsername(candidatesBeforePassword);
+    if(username !== null)
+        return username;
+    return findUsername(candidatesAfterPassword);
+}
+
+function stepBackwards(active) {
+    var inputNodes = document.querySelectorAll('input');
+    var inputs = Array.prototype.slice.call(inputNodes);
+    var index = inputs.indexOf(active);
+    if(index >= 0) {
+        for(var i = index; i >= 0; i--) {
+            if(isCandidateField(inputs[i]))
+                return inputs[i].value;
+        }
+    }
+    return null;
 }
 
 function getUsername() {
     var active = document.activeElement;
-    if(active.nodeName.toLowerCase() === 'input') {
-        var username = getUsernameIn(active.form);
-        if(username)
+    var form = active.form;
+    if(form && form.querySelector('input[type="password"]') !== null) {
+        var username = getUsernameIn(form);
+        if(username !== null)
             return username;
     }
-    return getUsernameIn(document);
+    var passwordFields = document.querySelectorAll('input[type="password"]');
+    for(var i = 0; i < passwordFields.length; i++) {
+        var username = getUsernameIn(passwordFields[i].form);
+        if(username !== null)
+            return username;
+    }
+    return stepBackwards(active);
 }
