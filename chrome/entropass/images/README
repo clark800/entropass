@@ -1,0 +1,9 @@
+The icons icon_16.png, icon_48.png, and icon_128.png are from the
+Oxygen Icon Pack (http://www.oxygen-icons.org/) and are licensed under
+the LGPLv3 license (see lgpl-3.0.txt). 
+
+SVG versions of these icons can be downloaded from:
+https://www.archlinux.org/packages/extra/any/oxygen-icons-svg/download/
+
+NOTE: The LGPL only applies to the icon images listed above, it does not
+apply to the other files in this application.

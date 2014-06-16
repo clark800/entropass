@@ -1,0 +1,28 @@
+
+p {
+    width: 600px;
+}
+
+textarea {
+    width: 400px;
+    height: 100px;
+}
+
+input:invalid,
+input:out-of-range {
+    border-color: hsl(0, 50%, 50%);
+    background: hsl(0, 50%, 90%);
+}
+
+#paypal {
+    display: inline-block;
+    padding-top: 10px;
+}
+
+#show-qr-code {
+    margin-top: 10px;
+}
+
+#qrcode {
+    margin: 20px;
+}

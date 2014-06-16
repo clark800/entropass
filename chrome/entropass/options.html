@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="options.css"/>
+    <script type="text/javascript" src="lib/pbkdf2.js"></script>
+    <script type="text/javascript" src="lib/sha512.js"></script>
+    <script type="text/javascript" src="lib/base64.js"></script>
+    <script type="text/javascript" src="lib/typedarrays.js"></script>
+    <script type="text/javascript" src="lib/qrcode.js"></script>
+    <script type="text/javascript" src="lib/entropass.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+    <script type="text/javascript" src="verify.js"></script>
+    <script type="text/javascript" src="options.js"></script>
+</head>
+<body>
+
+<h4>Private Key</h4>
+<p>Setting a private key will make it effectively impossible to determine
+your master password from any site password by brute force attack without
+the private key (even if you have a weak master passphrase). 
+Just be sure that you never lose your private key file!
+</p>
+<form>
+<label for="private-key-fingerprint">Private key fingerprint:</label>
+<input type="text" id="private-key-fingerprint" disabled/><br/>
+<input type="file" id="private-key"/>
+<input type="submit" id="save-private-key" value="Save"/>
+</form>
+
+<form>
+<input type="button" id="show-qr-code" value="Show QR Code"/>
+</form>
+<div id="qrcode"></div>
+
+<h4>Passphrase Verification</h4>
+<p>
+If you enter your passphrase below, a hash of it will be saved in order
+to verify that you type the same passphrase every time. If you type a
+different passphrase on accident, you will be alerted.
+</p>
+<form>
+<label for="passphrase">Passphrase:</label>
+<input type="password" id="passphrase">
+<input type="submit" id="save-passphrase" value="Save"/>
+</form>
+
+
+<h4>Site Defaults</h4>
+<form>
+<label for="default-password-length">Default Password Length</label>
+<input type="number" id="default-password-length" min="6" max="80" value="16"/>
+<input type="submit" id="save-default-password-length" value="Save"/>
+</form>
+
+<h4>Donations</h4>
+<p>If you would like to make a donation, here are some options.</p>
+
+Bitcoin: <b>1Do82XW4vK3wyVxFFSAhiGzn6dHTc68ouu</b><br/>
+
+Paypal:
+<div id="paypal">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="3ZXQQBT2A9JX8">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+</div>
+
+<h4>More Information &amp Bug Reporting</h4>
+Please visit <a href="http://rampantlogic.com/entropass/">http://rampantlogic.com/entropass/</a><br/>
+
+
+</body>
+</html>
