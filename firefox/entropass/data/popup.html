@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="popup.css"/>
+    <script type="text/javascript" src="lib/pbkdf2.js"></script>
+    <script type="text/javascript" src="lib/sha512.js"></script>
+    <script type="text/javascript" src="lib/base64.js"></script>
+    <script type="text/javascript" src="lib/entropass.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+    <script type="text/javascript" src="verify.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+</head>
+<body>
+    <form id="generate-form">
+        <label for="passphrase">Passphrase:</label>
+        <input type="password" id="passphrase"/>
+        <input class="button" type="submit" value="Insert"/>
+        <br/>
+        <label for="username">Username:</label>
+        <input type="text" id="username"/>
+        <input class="button" type="button" id="copy-password" value="Copy"/>
+        <br/>
+        <label for="domain">Domain:</label>
+        <input type="text" id="domain"/>
+        <input class="button" type="button" id="toggle-options" value="Options"/>
+        <br/>
+        <div id="options" style="display: none;">
+            <label for="password-length">Length:</label>
+            <input type="number" min="6" max="80" id="password-length" value="16">
+            </input>
+            <label for="reset-count" id="reset-count-label">Reset Count:</label>
+            <span id="reset-count">0</span>
+            <span id="reset-count-control">
+                <a href="#" id="decrement-reset-count">-</a>
+                <a href="#" id="increment-reset-count">+</a>
+            </span>
+            <label class="checkbox">
+            <input type="checkbox" id="allow-symbols" checked/>Symbols</label>
+        </div>
+    </form>
+</body>
+</html>
