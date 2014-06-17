@@ -189,7 +189,8 @@ function onCopyPassword(event) {
     event.preventDefault();
 }
 
-function init(domain) {
+function init(domain, username) {
+    get('username').value = username;
     get('domain').value = domain;
     get('passphrase').focus();
     on('generate-form', 'submit', onInsertPassword);

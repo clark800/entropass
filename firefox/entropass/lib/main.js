@@ -39,7 +39,13 @@ var button = buttons.ActionButton({
 popup.on("show", function() {
     var uri = ioService.newURI(tabs.activeTab.url, null, null);
     var domain = eTLDService.getBaseDomain(uri);
-    popup.port.emit("show", domain);
+    tabs.activeTab.attach({
+        contentScriptFile: self.data.url('username.js'),
+        contentScript: 'self.postMessage(getUsername());',
+        onMessage: function (username) {
+            popup.port.emit("show", domain, username);
+        }
+    });
 });
 
 popup.port.on("insert-password", function (password) {
