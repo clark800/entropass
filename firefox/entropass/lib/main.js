@@ -60,3 +60,7 @@ popup.port.on("copy-password", function (password) {
     clipboard.set(password);
     popup.hide();
 });
+
+popup.port.on('resize', function(change) {
+    popup.resize(popup.width, popup.height + change);
+});

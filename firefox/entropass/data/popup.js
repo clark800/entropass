@@ -189,12 +189,25 @@ function onCopyPassword(event) {
     event.preventDefault();
 }
 
+function onToggleOptions(event) {
+    var element = get('options');
+    if(element.style.display === 'none') {
+        element.style.display = '';
+        self.port.emit('resize', 20);
+    } else {
+        element.style.display = 'none';
+        self.port.emit('resize', -20);
+    }
+    event.preventDefault();
+}
+
 function init(domain, username) {
     get('username').value = username;
     get('domain').value = domain;
     get('passphrase').focus();
     on('generate-form', 'submit', onInsertPassword);
     on('copy-password', 'click', onCopyPassword);
+    on('toggle-options', 'click', onToggleOptions);
 }
 
 self.port.on('show', init);
