@@ -1,7 +1,12 @@
+const {Cc,Ci} = require("chrome");
 var buttons = require('sdk/ui/button/action');
 var clipboard = require("sdk/clipboard");
 var tabs = require("sdk/tabs");
 var self = require("sdk/self");
+var eTLDService = Cc["@mozilla.org/network/effective-tld-service;1"]
+                  .getService(Ci.nsIEffectiveTLDService);
+var ioService = Cc["@mozilla.org/network/io-service;1"]
+                  .getService(Ci.nsIIOService);
 
 var popup = require("sdk/panel").Panel({
     contentURL: self.data.url("popup.html"),
@@ -32,7 +37,9 @@ var button = buttons.ActionButton({
 });
 
 popup.on("show", function() {
-    popup.port.emit("show");
+    var uri = ioService.newURI(tabs.activeTab.url, null, null);
+    var domain = eTLDService.getBaseDomain(uri);
+    popup.port.emit("show", domain);
 });
 
 popup.port.on("insert-password", function (password) {
