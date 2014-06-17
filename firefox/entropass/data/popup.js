@@ -190,8 +190,9 @@ function onCopyPassword(event) {
 }
 
 function init() {
+    get('passphrase').focus();
     on('generate-form', 'submit', onInsertPassword);
     on('copy-password', 'click', onCopyPassword);
 }
 
-window.onload = init;
+self.port.on('show', init);

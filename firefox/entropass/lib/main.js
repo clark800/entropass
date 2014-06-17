@@ -36,7 +36,6 @@ popup.on("show", function() {
 });
 
 popup.port.on("insert-password", function (password) {
-    console.log(password);
     tabs.activeTab.attach({
         contentScriptFile: self.data.url('insert.js'),
         contentScript: 'insertPassword("' + password + '");'
