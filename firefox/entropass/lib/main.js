@@ -1,10 +1,17 @@
 var buttons = require('sdk/ui/button/action');
+var clipboard = require("sdk/clipboard");
 var tabs = require("sdk/tabs");
 var self = require("sdk/self");
 
 var popup = require("sdk/panel").Panel({
     contentURL: self.data.url("popup.html"),
-    contentScriptFile: self.data.url("popup.js"),
+    contentScriptFile: [
+        self.data.url('lib/pbkdf2.js'),
+        self.data.url('lib/sha512.js'),
+        self.data.url('lib/base64.js'),
+        self.data.url('lib/entropass.js'),
+        self.data.url('popup.js')
+    ],
     width: 430,
     height: 110
 });
@@ -30,5 +37,10 @@ popup.on("show", function() {
 
 popup.port.on("insert-password", function (password) {
     console.log(password);
+    popup.hide();
+});
+
+popup.port.on("copy-password", function (password) {
+    clipboard.set(password);
     popup.hide();
 });

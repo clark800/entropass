@@ -2,12 +2,14 @@
 var SETTINGS = {username: 'username', domain: 'domain',
                 passwordLength: 'password-length', resetCount: 'reset-count',
                 allowSymbols: 'allow-symbols'};
+function get(id) { return document.getElementById(id); }
 function on(id, evt, cb) { get(id).addEventListener(evt, cb); }
 function toggle(id) {
     var element = get(id);
     element.style.display = element.style.display === 'none' ? '' : 'none';
 }
 
+/*
 function setClipboard(password) {
     var cmd = 'setClipboard';
     chrome.runtime.sendMessage({command: cmd, text: password});
@@ -157,6 +159,39 @@ function init() {
     on('copy-password', 'click', onCopyPassword);
     on('passphrase', 'input', onPassphraseInput);
     on('toggle-options', 'click', function() {toggle('options');});
+}
+*/
+
+function withPassword(callback) {
+    var passphrase = get('passphrase').value;
+    var username = get('username').value;
+    var domain = get('domain').value;
+    var privateKeyHash = '';
+    var resetCount = 0;
+    var allowSymbols = true;
+    var passwordLength = 16;
+    var password = generatePassword(passphrase, resetCount, privateKeyHash,
+        domain, allowSymbols, passwordLength);
+    callback(password);
+}
+
+function onInsertPassword(event) {
+    withPassword(function(password) {
+        self.port.emit("insert-password", password);
+    });
+    event.preventDefault();
+}
+
+function onCopyPassword(event) {
+    withPassword(function(password) {
+        self.port.emit("copy-password", password);
+    });
+    event.preventDefault();
+}
+
+function init() {
+    on('generate-form', 'submit', onInsertPassword);
+    on('copy-password', 'click', onCopyPassword);
 }
 
 window.onload = init;
