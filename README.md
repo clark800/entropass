@@ -3,12 +3,12 @@ entropass
 
 Next
 ----
-* Username text box (auto-loaded by javascript)
-* Hide advanced settings by default
 * Add readme to github with screenshots (popup and options page)
-* Make web version for roaming
+* Store timestamp in site records for future sync feature
+* Allow multiple passphrase hashes
 * Add bug report for hash of public suffix list
 * Add validation check on public suffix list
+* Only clear clipboard if password is still in it (how can you tell?)
 
 Future
 ------
