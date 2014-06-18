@@ -3,6 +3,7 @@ var buttons = require('sdk/ui/button/action');
 var clipboard = require("sdk/clipboard");
 var tabs = require("sdk/tabs");
 var self = require("sdk/self");
+var pageMod = require("sdk/page-mod");
 var eTLDService = Cc["@mozilla.org/network/effective-tld-service;1"]
                   .getService(Ci.nsIEffectiveTLDService);
 var ioService = Cc["@mozilla.org/network/io-service;1"]
@@ -37,8 +38,9 @@ var button = buttons.ActionButton({
 });
 
 popup.on("show", function() {
+    var domain = '';
     var uri = ioService.newURI(tabs.activeTab.url, null, null);
-    var domain = eTLDService.getBaseDomain(uri);
+    try {domain = eTLDService.getBaseDomain(uri);} catch(e) {}
     tabs.activeTab.attach({
         contentScriptFile: self.data.url('username.js'),
         contentScript: 'self.postMessage(getUsername());',
