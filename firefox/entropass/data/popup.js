@@ -193,12 +193,16 @@ function onToggleOptions(event) {
     var element = get('options');
     if(element.style.display === 'none') {
         element.style.display = '';
-        self.port.emit('resize', 20);
+        self.port.emit('resize', 40);
     } else {
         element.style.display = 'none';
-        self.port.emit('resize', -20);
+        self.port.emit('resize', -40);
     }
     event.preventDefault();
+}
+
+function onSettings() {
+    self.port.emit('close');
 }
 
 function init(domain, username) {
@@ -208,6 +212,7 @@ function init(domain, username) {
     on('generate-form', 'submit', onInsertPassword);
     on('copy-password', 'click', onCopyPassword);
     on('toggle-options', 'click', onToggleOptions);
+    on('settings', 'click', onSettings);
 }
 
 self.port.on('show', init);

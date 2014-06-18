@@ -63,6 +63,8 @@ popup.port.on("copy-password", function (password) {
     popup.hide();
 });
 
+popup.port.on('close', function() {popup.hide();});
+
 popup.port.on('resize', function(change) {
     popup.resize(popup.width, popup.height + change);
 });

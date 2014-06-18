@@ -98,3 +98,8 @@ label.checkbox {
                 color-stop(0.05, #e9e9e9), color-stop(1, #f9f9f9));
     background-color: #e9e9e9;
 }
+
+#options .settings {
+    margin-top: 5px;
+    text-align: center;
+}
