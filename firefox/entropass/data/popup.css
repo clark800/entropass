@@ -7,6 +7,7 @@ body {
     min-width: 410px;
     font-size: 14px;
     font-family: Georgia;
+    overflow: hidden;
 }
 
 input[type="text"], input[type="password"], input[type="number"] {
@@ -14,6 +15,7 @@ input[type="text"], input[type="password"], input[type="number"] {
     border: 1px solid #BBB;
     border-radius: 5px;
     padding: 6px;
+    margin: 2px;
     width: 210px;
 }
 

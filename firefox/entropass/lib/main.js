@@ -19,7 +19,7 @@ var popup = require("sdk/panel").Panel({
         self.data.url('popup.js')
     ],
     width: 430,
-    height: 110
+    height: 120
 });
 
 var button = buttons.ActionButton({

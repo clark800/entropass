@@ -3,12 +3,14 @@ entropass
 
 Next
 ----
+* Require domain not empty
 * Add readme to github with screenshots (popup and options page)
 * Store timestamp in site records for future sync feature
 * Allow multiple passphrase hashes
 * Add bug report for hash of public suffix list
 * Add validation check on public suffix list
 * Only clear clipboard if password is still in it (how can you tell?)
+* Submit bug report for public suffix checksum
 
 Future
 ------

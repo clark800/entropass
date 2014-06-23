@@ -193,10 +193,10 @@ function onToggleOptions(event) {
     var element = get('options');
     if(element.style.display === 'none') {
         element.style.display = '';
-        self.port.emit('resize', 40);
+        self.port.emit('resize', 45);
     } else {
         element.style.display = 'none';
-        self.port.emit('resize', -40);
+        self.port.emit('resize', -45);
     }
     event.preventDefault();
 }
