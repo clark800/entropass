@@ -91,3 +91,7 @@ popup.port.on('close', function() {popup.hide();});
 popup.port.on('resize', function(change) {
     popup.resize(popup.width, popup.height + change);
 });
+
+popup.port.on('get-private-key-hash', function() {
+    popup.port.emit('private-key-hash', ss.storage.privateKeyHash);
+});

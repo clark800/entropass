@@ -9,6 +9,19 @@ function toggle(id) {
     element.style.display = element.style.display === 'none' ? '' : 'none';
 }
 
+function getResetCount() {
+    return parseInt(get('reset-count').innerHTML, 10);
+}
+
+function incrementResetCount() {
+    get('reset-count').innerHTML = (getResetCount() + 1).toString();
+}
+
+function decrementResetCount() {
+    var newValue = Math.max(0, getResetCount() - 1);
+    get('reset-count').innerHTML = newValue.toString();
+}
+
 /*
 function setClipboard(password) {
     var cmd = 'setClipboard';
@@ -46,19 +59,6 @@ function insertPassword(password) {
             });
         });
     });
-}
-
-function getResetCount() {
-    return parseInt(get('reset-count').innerHTML, 10);
-}
-
-function incrementResetCount() {
-    get('reset-count').innerHTML = (getResetCount() + 1).toString();
-}
-
-function decrementResetCount() {
-    var newValue = Math.max(0, getResetCount() - 1);
-    get('reset-count').innerHTML = newValue.toString();
 }
 
 function withDomain(callback) {
@@ -154,8 +154,6 @@ function init() {
     loadAndShowSettings('global', {defaultPasswordLength: 'password-length'});
     loadAndShowSiteSettings(SETTINGS, loadUsername);
     on('generate-form', 'submit', onGeneratePassword);
-    on('increment-reset-count', 'click', incrementResetCount);
-    on('decrement-reset-count', 'click', decrementResetCount);
     on('copy-password', 'click', onCopyPassword);
     on('passphrase', 'input', onPassphraseInput);
     on('toggle-options', 'click', function() {toggle('options');});
@@ -166,13 +164,15 @@ function withPassword(callback) {
     var passphrase = get('passphrase').value;
     var username = get('username').value;
     var domain = get('domain').value;
-    var privateKeyHash = '';
-    var resetCount = 0;
-    var allowSymbols = true;
-    var passwordLength = 16;
-    var password = generatePassword(passphrase, resetCount, privateKeyHash,
-        domain, allowSymbols, passwordLength);
-    callback(password);
+    var resetCount = getResetCount();
+    var allowSymbols = get('allow-symbols').checked;
+    var passwordLength = get('password-length').value;
+    self.port.once('private-key-hash', function(privateKeyHash) {
+        var password = generatePassword(passphrase, resetCount, privateKeyHash,
+            domain, allowSymbols, passwordLength);
+        callback(password);
+    });
+    self.port.emit('get-private-key-hash');
 }
 
 function onInsertPassword(event) {
@@ -190,13 +190,14 @@ function onCopyPassword(event) {
 }
 
 function onToggleOptions(event) {
+    var expandHeight = 45;
     var element = get('options');
     if(element.style.display === 'none') {
         element.style.display = '';
-        self.port.emit('resize', 45);
+        self.port.emit('resize', expandHeight);
     } else {
         element.style.display = 'none';
-        self.port.emit('resize', -45);
+        self.port.emit('resize', -expandHeight);
     }
     event.preventDefault();
 }
@@ -213,6 +214,8 @@ function init(domain, username) {
     on('copy-password', 'click', onCopyPassword);
     on('toggle-options', 'click', onToggleOptions);
     on('settings', 'click', onSettings);
+    on('increment-reset-count', 'click', incrementResetCount);
+    on('decrement-reset-count', 'click', decrementResetCount);
 }
 
 self.port.on('show', init);
