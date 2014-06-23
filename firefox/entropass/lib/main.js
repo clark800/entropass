@@ -8,6 +8,29 @@ var eTLDService = Cc["@mozilla.org/network/effective-tld-service;1"]
                   .getService(Ci.nsIEffectiveTLDService);
 var ioService = Cc["@mozilla.org/network/io-service;1"]
                   .getService(Ci.nsIIOService);
+var ss = require("sdk/simple-storage");
+var pageMod = require("sdk/page-mod");
+
+pageMod.PageMod({
+    include: self.data.url('options.html'),
+    contentScriptFile: [
+        self.data.url('lib/pbkdf2.js'),
+        self.data.url('lib/sha512.js'),
+        self.data.url('lib/base64.js'),
+        self.data.url('lib/typedarrays.js'),
+        self.data.url('lib/qrcode.js'),
+        self.data.url('lib/entropass.js'),
+        self.data.url('options.js')
+    ],
+    onAttach: function(worker) {
+        worker.port.emit('attach');
+        worker.port.emit('show-fingerprint', ss.storage.privateKeyHash);
+        worker.port.on('save-private-key', function(privateKeyHash) {
+            ss.storage.privateKeyHash = privateKeyHash;
+            console.log(privateKeyHash);
+        });
+    }
+});
 
 var popup = require("sdk/panel").Panel({
     contentURL: self.data.url("popup.html"),

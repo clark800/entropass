@@ -1,5 +1,6 @@
 
 var SETTINGS = {defaultPasswordLength: 'default-password-length'};
+function get(id) { return document.getElementById(id); }
 function on(id, evt, cb) { get(id).addEventListener(evt, cb); }
 function sha512(data) { return CryptoJS.SHA512(data).toString(); }
 
@@ -20,18 +21,14 @@ function togglePrivateKeyQRCode() {
     }
 }
 
-function showPrivateKeyFingerprint() {
-    var storageKey = 'privateKeyHash';
-    chrome.storage.local.get(storageKey, function(items) {
-        var privateKey = items[storageKey];
-        var text = privateKey ? sha512(privateKey).slice(0, 8) : '';
-        get('private-key-fingerprint').value = text;
-    });
+function showPrivateKeyFingerprint(privateKeyHash) {
+    var text = privateKeyHash ? sha512(privateKeyHash).slice(0, 8) : '';
+    get('private-key-fingerprint').value = text;
 }
 
 function savePrivateKeyHash(privateKeyHash) {
-    var items = {'privateKeyHash': privateKeyHash};
-    chrome.storage.local.set(items, showPrivateKeyFingerprint);
+    self.port.emit('save-private-key', privateKeyHash);
+    showPrivateKeyFingerprint(privateKeyHash);
 }
 
 function uint8ArrayToWordArray(uint8Array) {
@@ -57,18 +54,16 @@ function savePrivateKey() {
     get('private-key').value = null;
 }
 
-function onSavePrivateKey() {
-    var storageKey = 'privateKeyHash';
+function onSavePrivateKey(event) {
     var msg = 'Are you sure you want to replace the current private key?';
-    chrome.storage.local.get(storageKey, function(items) {
-        if(items[storageKey] !== undefined)
-            if(!confirm(msg))
-                return;
-        savePrivateKey();
-    });
+    var hash = get('private-key-fingerprint').value;
+    if(hash !== '' && !confirm(msg))
+        return;
+    savePrivateKey();
     event.preventDefault();
 }
 
+/*
 function onSaveDefaultPasswordLength() {
     var defaultPasswordLength = get('default-password-length').value;
     if(defaultPasswordLength >= 6 && defaultPasswordLength <= 80) {
@@ -101,6 +96,11 @@ function init() {
     chrome.storage.sync.get(null, function(items) {
         get('sync-data').value = JSON.stringify(items, null, 4);
     });
+}*/
+
+function init() {
+    on('save-private-key', 'click', onSavePrivateKey);
 }
 
-window.onload = init;
+self.port.on('attach', init);
+self.port.on('show-fingerprint', showPrivateKeyFingerprint);
