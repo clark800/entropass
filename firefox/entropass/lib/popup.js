@@ -1,5 +1,6 @@
 const {Cc,Ci} = require('chrome');
 var self = require('sdk/self');
+var panel = require('sdk/panel');
 var ss = require('sdk/simple-storage');
 var clipboard = require('sdk/clipboard');
 var tabs = require('sdk/tabs');
@@ -9,7 +10,7 @@ var eTLDService = Cc['@mozilla.org/network/effective-tld-service;1']
 var ioService = Cc['@mozilla.org/network/io-service;1']
                   .getService(Ci.nsIIOService);
 
-var popup = require('sdk/panel').Panel({
+var popup = panel.Panel({
     contentURL: self.data.url('popup.html'),
     contentScriptFile: [
         self.data.url('lib/pbkdf2.js'),

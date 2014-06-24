@@ -6,9 +6,9 @@ var button = buttons.ActionButton({
     id: 'entropass-button',
     label: 'Entropass',
     icon: {
-        '16': './icon-16.png',
-        '32': './icon-32.png',
-        '64': './icon-64.png'
+        '16': './img/icon-16.png',
+        '32': './img/icon-32.png',
+        '64': './img/icon-64.png'
     },
     onClick: function(state) {
         popup.popup.show({
