@@ -32,7 +32,8 @@ popup.on("show", function() {
         contentScriptFile: self.data.url('username.js'),
         contentScript: 'self.postMessage(getUsername());',
         onMessage: function (username) {
-            popup.port.emit("show", domain, username, settings);
+            popup.port.emit("show", domain, username, settings,
+                ss.storage.defaultPasswordLength);
         }
     });
 });

@@ -80,10 +80,6 @@ function loadAndShowSiteSettings(mapping, callback) {
     });
 }
 
-function onPassphraseInput() {
-    get('passphrase').setCustomValidity('');
-}
-
 function loadUsername(settings) {
     withUsername(function(username) {
         get('username').value = (username ? username : settings.username) || '';
@@ -94,9 +90,12 @@ function loadUsername(settings) {
 
 function init() {
     loadAndShowSettings('global', {defaultPasswordLength: 'password-length'});
-    on('passphrase', 'input', onPassphraseInput);
 }
 */
+
+function onPassphraseInput() {
+    get('passphrase').setCustomValidity('');
+}
 
 function withPassword(callback) {
     var passphrase = get('passphrase').value;
@@ -104,7 +103,7 @@ function withPassword(callback) {
     var domain = get('domain').value;
     var resetCount = getResetCount();
     var allowSymbols = get('allow-symbols').checked;
-    var passwordLength = get('password-length').value;
+    var passwordLength = parseInt(get('password-length').value, 10);
     self.port.once('private-key-hash', function(privateKeyHash) {
         var password = generatePassword(passphrase, resetCount, privateKeyHash,
             domain, allowSymbols, passwordLength);
@@ -141,14 +140,25 @@ function onToggleOptions(event) {
     event.preventDefault();
 }
 
+function collapseOptions() {
+    var expandHeight = 45;
+    var element = get('options');
+    if(element.style.display !== 'none') {
+        element.style.display = 'none';
+        self.port.emit('resize', -expandHeight);
+    }
+}
+
 function onSettings() {
     self.port.emit('close');
 }
 
-function init(domain, username, settings) {
+function init(domain, username, settings, defaultPasswordLength) {
     DOMAIN = domain;
+    collapseOptions();
     get('username').value = username;
     get('domain').value = domain;
+    get('password-length').value = defaultPasswordLength || 16;
     showSettings(settings, SETTINGS);
     get('passphrase').focus();
     on('generate-form', 'submit', onInsertPassword);
@@ -157,6 +167,7 @@ function init(domain, username, settings) {
     on('settings', 'click', onSettings);
     on('increment-reset-count', 'click', incrementResetCount);
     on('decrement-reset-count', 'click', decrementResetCount);
+    on('passphrase', 'input', onPassphraseInput);
 }
 
 self.port.on('show', init);

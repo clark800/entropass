@@ -2,6 +2,7 @@ var self = require("sdk/self");
 var buttons = require('sdk/ui/button/action');
 var pageMod = require("sdk/page-mod");
 var popup = require('./popup.js');
+var ss = require("sdk/simple-storage");
 
 var button = buttons.ActionButton({
     id: "entropass-button",
@@ -30,11 +31,16 @@ pageMod.PageMod({
         self.data.url('options.js')
     ],
     onAttach: function(worker) {
-        worker.port.emit('attach');
-        worker.port.emit('show-fingerprint', ss.storage.privateKeyHash);
+        worker.port.emit('attach', ss.storage.privateKeyHash,
+            ss.storage.defaultPasswordLength);
         worker.port.on('save-private-key', function(privateKeyHash) {
             ss.storage.privateKeyHash = privateKeyHash;
             console.log(privateKeyHash);
         });
+        worker.port.on('save-default-password-length',
+            function(defaultPasswordLength) {
+                ss.storage.defaultPasswordLength = defaultPasswordLength;
+            }
+        );
     }
 });

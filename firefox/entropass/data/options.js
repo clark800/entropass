@@ -4,7 +4,7 @@ function get(id) { return document.getElementById(id); }
 function on(id, evt, cb) { get(id).addEventListener(evt, cb); }
 function sha512(data) { return CryptoJS.SHA512(data).toString(); }
 
-function togglePrivateKeyQRCode() {
+function togglePrivateKeyQRCode(privateKeyHash) {
     var div = get('qrcode');
     var button = get('show-qr-code');
     if(div.hasChildNodes()) {
@@ -13,11 +13,8 @@ function togglePrivateKeyQRCode() {
             div.removeChild(div.firstChild);
         button.setAttribute('value', 'Show QR Code');
     } else {
-        var storageKey = 'privateKeyHash';
-        chrome.storage.local.get(storageKey, function(items) {
-            new QRCode(div, items[storageKey]);
-            button.setAttribute('value', 'Hide QR Code');
-        });
+        new QRCode(div, privateKeyHash);
+        button.setAttribute('value', 'Hide QR Code');
     }
 }
 
@@ -63,16 +60,17 @@ function onSavePrivateKey(event) {
     event.preventDefault();
 }
 
-/*
-function onSaveDefaultPasswordLength() {
+function onSaveDefaultPasswordLength(event) {
     var defaultPasswordLength = get('default-password-length').value;
     if(defaultPasswordLength >= 6 && defaultPasswordLength <= 80) {
-        var settings = {'defaultPasswordLength': defaultPasswordLength};
-        saveSettings('global', settings);
+        self.port.emit('save-default-password-length', defaultPasswordLength);
+    } else {
+        alert('Default password length must be between 6 and 80.');
     }
     event.preventDefault();
 }
 
+/*
 function onSavePassphrase() {
     var passphrase = get('passphrase').value;
     get('passphrase').value = '';
@@ -87,20 +85,21 @@ function onSavePassphrase() {
 }
 
 function init() {
-    showPrivateKeyFingerprint();
     loadAndShowSettings('global', SETTINGS);
-    on('save-private-key', 'click', onSavePrivateKey);
     on('save-passphrase', 'click', onSavePassphrase);
-    on('save-default-password-length', 'click', onSaveDefaultPasswordLength);
-    on('show-qr-code', 'click', togglePrivateKeyQRCode);
     chrome.storage.sync.get(null, function(items) {
         get('sync-data').value = JSON.stringify(items, null, 4);
     });
 }*/
 
-function init() {
+function init(privateKeyHash, defaultPasswordLength) {
+    showPrivateKeyFingerprint(privateKeyHash);
+    get('default-password-length').value = defaultPasswordLength || 16;
     on('save-private-key', 'click', onSavePrivateKey);
+    on('save-default-password-length', 'click', onSaveDefaultPasswordLength);
+    on('show-qr-code', 'click', function() {
+        togglePrivateKeyQRCode(privateKeyHash);
+    });
 }
 
 self.port.on('attach', init);
-self.port.on('show-fingerprint', showPrivateKeyFingerprint);
