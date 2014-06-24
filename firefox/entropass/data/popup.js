@@ -1,4 +1,5 @@
 
+var DOMAIN;
 var SETTINGS = {username: 'username', domain: 'domain',
                 passwordLength: 'password-length', resetCount: 'reset-count',
                 allowSymbols: 'allow-symbols'};
@@ -22,66 +23,18 @@ function decrementResetCount() {
     get('reset-count').innerHTML = newValue.toString();
 }
 
-/*
-function setClipboard(password) {
-    var cmd = 'setClipboard';
-    chrome.runtime.sendMessage({command: cmd, text: password});
-    chrome.runtime.sendMessage({command: cmd, text: ' ', delay: 10000});
-    window.close();
-}
-
-function extractHost(url) {
-    if(!url)
-        return '';
-    var sep = url.indexOf('://');
-    var start = sep >= 0 ? sep + 3 : 0;
-    var slash = url.indexOf('/', start);
-    var end = slash >= 0 ? slash : undefined;
-    return url.slice(start, end);
-}
-
-function withUsername(callback) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.executeScript(tabs[0].id, {file: 'username.js'}, function() {
-            chrome.tabs.executeScript(tabs[0].id, {
-                code: 'getUsername();'}, function(result) { callback(result[0]); }
-            );
-        });
-    });
-}
-
-function insertPassword(password) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.executeScript(tabs[0].id, {file: 'insert.js'}, function() {
-            chrome.tabs.executeScript(tabs[0].id, {
-                code: 'insertPassword("' + password + '");'}, function() {
-                    window.close();
-            });
-        });
-    });
-}
-
-function withDomain(callback) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        var host = extractHost(tabs[0].url);
-        var message = {command: 'getDomain', host: host};
-        chrome.runtime.sendMessage(message, callback);
-    });
-}
-
 function saveSiteSettings(settings) {
-    withDomain(function(domain) {
-        // don't store default values to save space, no default for length
-        if(settings.domain === domain)
-            delete settings.domain;
-        if(settings.resetCount === "0" || settings.resetCount === 0)
-            delete settings.resetCount;
-        if(settings.allowSymbols === true)
-            delete settings.allowSymbols;
-        saveSettings('site:' + domain, settings);
-    });
+    // don't store default values to save space, no default for length
+    if(settings.domain === DOMAIN)
+        delete settings.domain;
+    if(settings.resetCount === "0" || settings.resetCount === 0)
+        delete settings.resetCount;
+    if(settings.allowSymbols === true)
+        delete settings.allowSymbols;
+    self.port.emit('save-settings', DOMAIN, settings);
 }
 
+/*
 function withPassword(passphrase, settings, callback) {
     saveSiteSettings(settings);
     var storageKey = 'privateKeyHash';
@@ -121,16 +74,6 @@ function onInvalidPassphrase() {
     field.focus();
 }
 
-function onGeneratePassword() {
-    withVerifiedPassword(insertPassword, onInvalidPassphrase);
-    event.preventDefault();
-}
-
-function onCopyPassword() {
-    withVerifiedPassword(setClipboard, onInvalidPassphrase);
-    event.preventDefault();
-}
-
 function loadAndShowSiteSettings(mapping, callback) {
     withDomain(function(domain) {
         loadAndShowSettings('site:' + domain, mapping, callback);
@@ -150,13 +93,8 @@ function loadUsername(settings) {
 }
 
 function init() {
-    withDomain(function(domain) {setValue('domain', domain);});
     loadAndShowSettings('global', {defaultPasswordLength: 'password-length'});
-    loadAndShowSiteSettings(SETTINGS, loadUsername);
-    on('generate-form', 'submit', onGeneratePassword);
-    on('copy-password', 'click', onCopyPassword);
     on('passphrase', 'input', onPassphraseInput);
-    on('toggle-options', 'click', function() {toggle('options');});
 }
 */
 
@@ -173,6 +111,7 @@ function withPassword(callback) {
         callback(password);
     });
     self.port.emit('get-private-key-hash');
+    saveSiteSettings(readSettings(SETTINGS));
 }
 
 function onInsertPassword(event) {
@@ -206,9 +145,11 @@ function onSettings() {
     self.port.emit('close');
 }
 
-function init(domain, username) {
+function init(domain, username, settings) {
+    DOMAIN = domain;
     get('username').value = username;
     get('domain').value = domain;
+    showSettings(settings, SETTINGS);
     get('passphrase').focus();
     on('generate-form', 'submit', onInsertPassword);
     on('copy-password', 'click', onCopyPassword);
