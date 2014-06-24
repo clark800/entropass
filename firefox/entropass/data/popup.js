@@ -1,5 +1,5 @@
 
-var DOMAIN;
+var GLOBAL = {};
 var SETTINGS = {username: 'username', domain: 'domain',
                 passwordLength: 'password-length', resetCount: 'reset-count',
                 allowSymbols: 'allow-symbols'};
@@ -25,25 +25,13 @@ function decrementResetCount() {
 
 function saveSiteSettings(settings) {
     // don't store default values to save space, no default for length
-    if(settings.domain === DOMAIN)
+    if(settings.domain === GLOBAL.domain)
         delete settings.domain;
-    if(settings.resetCount === "0" || settings.resetCount === 0)
+    if(settings.resetCount === '0' || settings.resetCount === 0)
         delete settings.resetCount;
     if(settings.allowSymbols === true)
         delete settings.allowSymbols;
-    self.port.emit('save-settings', DOMAIN, settings);
-}
-
-/*
-function withPassword(passphrase, settings, callback) {
-    saveSiteSettings(settings);
-    var storageKey = 'privateKeyHash';
-    chrome.storage.local.get(storageKey, function(items) {
-        var privateKeyHash = items[storageKey] ? items[storageKey] : '';
-        callback(generatePassword(passphrase, parseInt(settings.resetCount, 10),
-            privateKeyHash, settings.domain, settings.allowSymbols,
-            parseInt(settings.passwordLength, 10)));
-    });
+    self.port.emit('save-settings', GLOBAL.domain, settings);
 }
 
 function withVerifiedPassword(callback, onFail) {
@@ -53,19 +41,16 @@ function withVerifiedPassword(callback, onFail) {
     var passphrase = get('passphrase').value;
     setValue('passphrase', '');
 
-    var storageKeyPassphrase = 'passphrase-hash';
-    chrome.storage.local.get(storageKeyPassphrase, function(items) {
-        if(items[storageKeyPassphrase]) {
-            withPassphraseHash(passphrase, function(hash) {
-                if(hash === items[storageKeyPassphrase])
-                    withPassword(passphrase, settings, callback);
-                else
-                    onFail();
-            });
-        } else {
+    if(GLOBAL.passphraseHash) {
+        var passphraseHash = generatePassword(
+            passphrase, 0, GLOBAL.privateKeyHash, '', true, 80)
+        if(passphraseHash === GLOBAL.passphraseHash)
             withPassword(passphrase, settings, callback);
-        }
-    });
+        else
+            onFail();
+    } else {
+        withPassword(passphrase, settings, callback);
+    }
 }
 
 function onInvalidPassphrase() {
@@ -74,56 +59,37 @@ function onInvalidPassphrase() {
     field.focus();
 }
 
-function loadAndShowSiteSettings(mapping, callback) {
-    withDomain(function(domain) {
-        loadAndShowSettings('site:' + domain, mapping, callback);
-    });
+function loadUsername(username, settings) {
+    get('username').value = (username ? username : settings.username) || '';
+    if(username && settings.username && (username !== settings.username))
+        get('username').className += 'warning';
 }
-
-function loadUsername(settings) {
-    withUsername(function(username) {
-        get('username').value = (username ? username : settings.username) || '';
-        if(username && settings.username && (username !== settings.username))
-            get('username').className += 'warning';
-    });
-}
-
-function init() {
-    loadAndShowSettings('global', {defaultPasswordLength: 'password-length'});
-}
-*/
 
 function onPassphraseInput() {
     get('passphrase').setCustomValidity('');
 }
 
-function withPassword(callback) {
-    var passphrase = get('passphrase').value;
-    var username = get('username').value;
-    var domain = get('domain').value;
-    var resetCount = getResetCount();
-    var allowSymbols = get('allow-symbols').checked;
-    var passwordLength = parseInt(get('password-length').value, 10);
-    self.port.once('private-key-hash', function(privateKeyHash) {
-        var password = generatePassword(passphrase, resetCount, privateKeyHash,
-            domain, allowSymbols, passwordLength);
-        callback(password);
-    });
-    self.port.emit('get-private-key-hash');
-    saveSiteSettings(readSettings(SETTINGS));
+function withPassword(passphrase, settings, callback) {
+    var resetCount = parseInt(settings.resetCount, 10);
+    var passwordLength = parseInt(settings.passwordLength, 10);
+    var password = generatePassword(passphrase, resetCount,
+        GLOBAL.privateKeyHash, settings.domain, settings.allowSymbols,
+        passwordLength);
+    callback(password);
+    saveSiteSettings(settings);
 }
 
 function onInsertPassword(event) {
-    withPassword(function(password) {
-        self.port.emit("insert-password", password);
-    });
+    withVerifiedPassword(function(password) {
+        self.port.emit('insert-password', password);
+    }, onInvalidPassphrase);
     event.preventDefault();
 }
 
 function onCopyPassword(event) {
-    withPassword(function(password) {
-        self.port.emit("copy-password", password);
-    });
+    withVerifiedPassword(function(password) {
+        self.port.emit('copy-password', password);
+    }, onInvalidPassphrase);
     event.preventDefault();
 }
 
@@ -153,13 +119,14 @@ function onSettings() {
     self.port.emit('close');
 }
 
-function init(domain, username, settings, defaultPasswordLength) {
-    DOMAIN = domain;
+function init(domain, username, localSettings, siteSettings) {
+    GLOBAL = localSettings;
+    GLOBAL.domain = domain;
     collapseOptions();
-    get('username').value = username;
+    loadUsername(username, siteSettings);
     get('domain').value = domain;
-    get('password-length').value = defaultPasswordLength || 16;
-    showSettings(settings, SETTINGS);
+    get('password-length').value = localSettings.defaultPasswordLength || 16;
+    showSettings(siteSettings, SETTINGS);
     get('passphrase').focus();
     on('generate-form', 'submit', onInsertPassword);
     on('copy-password', 'click', onCopyPassword);

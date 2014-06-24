@@ -1,16 +1,16 @@
-var self = require("sdk/self");
+var self = require('sdk/self');
 var buttons = require('sdk/ui/button/action');
-var pageMod = require("sdk/page-mod");
+var pageMod = require('sdk/page-mod');
 var popup = require('./popup.js');
-var ss = require("sdk/simple-storage");
+var ss = require('sdk/simple-storage');
 
 var button = buttons.ActionButton({
-    id: "entropass-button",
-    label: "Entropass",
+    id: 'entropass-button',
+    label: 'Entropass',
     icon: {
-        "16": "./icon-16.png",
-        "32": "./icon-32.png",
-        "64": "./icon-64.png"
+        '16': './icon-16.png',
+        '32': './icon-32.png',
+        '64': './icon-64.png'
     },
     onClick: function(state) {
         popup.popup.show({
@@ -47,5 +47,11 @@ pageMod.PageMod({
                 ss.storage.defaultPasswordLength = defaultPasswordLength;
             }
         );
+        worker.port.on('save-passphrase-hash', function(passphraseHash) {
+            if(passphraseHash)
+                ss.storage.passphraseHash = passphraseHash;
+            else
+                delete ss.storage.passphraseHash;
+        });
     }
 });

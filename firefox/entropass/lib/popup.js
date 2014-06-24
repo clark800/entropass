@@ -1,16 +1,16 @@
-const {Cc,Ci} = require("chrome");
-var self = require("sdk/self");
-var clipboard = require("sdk/clipboard");
-var tabs = require("sdk/tabs");
+const {Cc,Ci} = require('chrome');
+var self = require('sdk/self');
+var clipboard = require('sdk/clipboard');
+var tabs = require('sdk/tabs');
 var timers = require('sdk/timers');
-var eTLDService = Cc["@mozilla.org/network/effective-tld-service;1"]
+var eTLDService = Cc['@mozilla.org/network/effective-tld-service;1']
                   .getService(Ci.nsIEffectiveTLDService);
-var ioService = Cc["@mozilla.org/network/io-service;1"]
+var ioService = Cc['@mozilla.org/network/io-service;1']
                   .getService(Ci.nsIIOService);
-var ss = require("sdk/simple-storage");
+var ss = require('sdk/simple-storage');
 
-var popup = require("sdk/panel").Panel({
-    contentURL: self.data.url("popup.html"),
+var popup = require('sdk/panel').Panel({
+    contentURL: self.data.url('popup.html'),
     contentScriptFile: [
         self.data.url('lib/pbkdf2.js'),
         self.data.url('lib/sha512.js'),
@@ -23,22 +23,27 @@ var popup = require("sdk/panel").Panel({
     height: 120
 });
 
-popup.on("show", function() {
+popup.on('show', function() {
     var domain = '';
     var uri = ioService.newURI(tabs.activeTab.url, null, null);
     try {domain = eTLDService.getBaseDomain(uri);} catch(e) {}
-    var settings = JSON.parse(ss.storage['site:' + domain] || '{}');
+    var siteSettings = JSON.parse(ss.storage['site:' + domain] || '{}');
+    var localSettings = {
+        'privateKeyHash': ss.storage.privateKeyHash,
+        'passphraseHash': ss.storage.passphraseHash,
+        'defaultPasswordLength': ss.storage.defaultPasswordLength
+    }
     tabs.activeTab.attach({
         contentScriptFile: self.data.url('username.js'),
         contentScript: 'self.postMessage(getUsername());',
         onMessage: function (username) {
-            popup.port.emit("show", domain, username, settings,
-                ss.storage.defaultPasswordLength);
+            popup.port.emit('show', domain, username, localSettings,
+                            siteSettings);
         }
     });
 });
 
-popup.port.on("insert-password", function (password) {
+popup.port.on('insert-password', function (password) {
     tabs.activeTab.attach({
         contentScriptFile: self.data.url('insert.js'),
         contentScript: 'insertPassword("' + password + '");'
@@ -46,7 +51,7 @@ popup.port.on("insert-password", function (password) {
     popup.hide();
 });
 
-popup.port.on("copy-password", function (password) {
+popup.port.on('copy-password', function (password) {
     clipboard.set(password);
     timers.setTimeout(function() {clipboard.set('');}, 15000);
     popup.hide();

@@ -1,5 +1,4 @@
 
-var SETTINGS = {defaultPasswordLength: 'default-password-length'};
 function get(id) { return document.getElementById(id); }
 function on(id, evt, cb) { get(id).addEventListener(evt, cb); }
 function sha512(data) { return CryptoJS.SHA512(data).toString(); }
@@ -70,32 +69,28 @@ function onSaveDefaultPasswordLength(event) {
     event.preventDefault();
 }
 
-/*
-function onSavePassphrase() {
+function onSavePassphrase(event, privateKeyHash) {
     var passphrase = get('passphrase').value;
     get('passphrase').value = '';
-    if(passphrase === '') {
-        chrome.storage.local.remove('passphrase-hash');
-    } else {
-        withPassphraseHash(passphrase, function(hash) {
-            chrome.storage.local.set({'passphrase-hash': hash});
-        });
-    }
+    var passphraseHash = (passphrase ?
+        generatePassword(passphrase, 0, privateKeyHash, '', true, 80)
+        : '');
+    self.port.emit('save-passphrase-hash', passphraseHash);
     event.preventDefault();
 }
-
-function init() {
-    on('save-passphrase', 'click', onSavePassphrase);
-}*/
 
 function init(privateKeyHash, syncData, defaultPasswordLength) {
     showPrivateKeyFingerprint(privateKeyHash);
     get('sync-data').value = JSON.stringify(syncData, null, 4);
     get('default-password-length').value = defaultPasswordLength || 16;
     on('save-private-key', 'click', onSavePrivateKey);
+    on('save-passphrase', 'click', function(event) {
+        onSavePassphrase(event, privateKeyHash);
+    });
     on('save-default-password-length', 'click', onSaveDefaultPasswordLength);
-    on('show-qr-code', 'click', function() {
+    on('show-qr-code', 'click', function(event) {
         togglePrivateKeyQRCode(privateKeyHash);
+        event.preventDefault();
     });
 }
 
