@@ -85,15 +85,12 @@ function onSavePassphrase() {
 }
 
 function init() {
-    loadAndShowSettings('global', SETTINGS);
     on('save-passphrase', 'click', onSavePassphrase);
-    chrome.storage.sync.get(null, function(items) {
-        get('sync-data').value = JSON.stringify(items, null, 4);
-    });
 }*/
 
-function init(privateKeyHash, defaultPasswordLength) {
+function init(privateKeyHash, syncData, defaultPasswordLength) {
     showPrivateKeyFingerprint(privateKeyHash);
+    get('sync-data').value = JSON.stringify(syncData, null, 4);
     get('default-password-length').value = defaultPasswordLength || 16;
     on('save-private-key', 'click', onSavePrivateKey);
     on('save-default-password-length', 'click', onSaveDefaultPasswordLength);

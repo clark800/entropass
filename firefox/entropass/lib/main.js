@@ -31,7 +31,12 @@ pageMod.PageMod({
         self.data.url('options.js')
     ],
     onAttach: function(worker) {
-        worker.port.emit('attach', ss.storage.privateKeyHash,
+        var syncData = {};
+        for(var key in ss.storage) {
+            if(ss.storage.hasOwnProperty(key) && key.indexOf('site:') === 0)
+                syncData[key] = ss.storage[key];
+        }
+        worker.port.emit('attach', ss.storage.privateKeyHash, syncData,
             ss.storage.defaultPasswordLength);
         worker.port.on('save-private-key', function(privateKeyHash) {
             ss.storage.privateKeyHash = privateKeyHash;
