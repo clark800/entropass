@@ -23,7 +23,7 @@ function showPrivateKeyFingerprint(privateKeyHash) {
 }
 
 function savePrivateKeyHash(privateKeyHash) {
-    self.port.emit('save-private-key', privateKeyHash);
+    self.port.emit('save-setting', 'privateKeyHash', privateKeyHash);
     showPrivateKeyFingerprint(privateKeyHash);
 }
 
@@ -62,9 +62,10 @@ function onSavePrivateKey(event) {
 function onSaveDefaultPasswordLength(event) {
     var defaultPasswordLength = get('default-password-length').value;
     if(defaultPasswordLength >= 6 && defaultPasswordLength <= 80) {
-        self.port.emit('save-default-password-length', defaultPasswordLength);
+        self.port.emit('save-setting', 'defaultPasswordLength',
+                       defaultPasswordLength);
     } else {
-        alert('Default password length must be between 6 and 80.');
+        alert('Default password length must be between 6 and 80 characters.');
     }
     event.preventDefault();
 }
@@ -75,7 +76,7 @@ function onSavePassphrase(event, privateKeyHash) {
     var passphraseHash = (passphrase ?
         generatePassword(passphrase, 0, privateKeyHash, '', true, 80)
         : '');
-    self.port.emit('save-passphrase-hash', passphraseHash);
+    self.port.emit('save-setting', 'passphraseHash', passphraseHash);
     event.preventDefault();
 }
 

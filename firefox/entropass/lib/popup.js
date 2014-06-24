@@ -1,5 +1,6 @@
 const {Cc,Ci} = require('chrome');
 var self = require('sdk/self');
+var ss = require('sdk/simple-storage');
 var clipboard = require('sdk/clipboard');
 var tabs = require('sdk/tabs');
 var timers = require('sdk/timers');
@@ -7,7 +8,6 @@ var eTLDService = Cc['@mozilla.org/network/effective-tld-service;1']
                   .getService(Ci.nsIEffectiveTLDService);
 var ioService = Cc['@mozilla.org/network/io-service;1']
                   .getService(Ci.nsIIOService);
-var ss = require('sdk/simple-storage');
 
 var popup = require('sdk/panel').Panel({
     contentURL: self.data.url('popup.html'),
@@ -61,10 +61,6 @@ popup.port.on('close', function() {popup.hide();});
 
 popup.port.on('resize', function(change) {
     popup.resize(popup.width, popup.height + change);
-});
-
-popup.port.on('get-private-key-hash', function() {
-    popup.port.emit('private-key-hash', ss.storage.privateKeyHash);
 });
 
 popup.port.on('save-settings', function(domain, settings) {

@@ -4,6 +4,7 @@ entropass
 Next
 ----
 * Require domain not empty
+* Verify default password length within range in chrome options page
 * Add readme to github with screenshots (popup and options page)
 * Store timestamp in site records for future sync feature
 * Allow multiple passphrase hashes
