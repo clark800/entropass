@@ -1,9 +1,10 @@
 
+var GLOBAL = {};
 function get(id) { return document.getElementById(id); }
 function on(id, evt, cb) { get(id).addEventListener(evt, cb); }
 function sha512(data) { return CryptoJS.SHA512(data).toString(); }
 
-function togglePrivateKeyQRCode(privateKeyHash) {
+function togglePrivateKeyQRCode() {
     var div = get('qrcode');
     var button = get('show-qr-code');
     if(div.hasChildNodes()) {
@@ -12,7 +13,7 @@ function togglePrivateKeyQRCode(privateKeyHash) {
             div.removeChild(div.firstChild);
         button.setAttribute('value', 'Show QR Code');
     } else {
-        new QRCode(div, privateKeyHash);
+        new QRCode(div, GLOBAL.privateKeyHash);
         button.setAttribute('value', 'Hide QR Code');
     }
 }
@@ -24,6 +25,7 @@ function showPrivateKeyFingerprint(privateKeyHash) {
 
 function savePrivateKeyHash(privateKeyHash) {
     self.port.emit('save-setting', 'privateKeyHash', privateKeyHash);
+    GLOBAL.privateKeyHash = privateKeyHash;
     showPrivateKeyFingerprint(privateKeyHash);
 }
 
@@ -81,6 +83,7 @@ function onSavePassphrase(event, privateKeyHash) {
 }
 
 function init(privateKeyHash, syncData, defaultPasswordLength) {
+    GLOBAL.privateKeyHash = privateKeyHash;
     showPrivateKeyFingerprint(privateKeyHash);
     get('sync-data').value = JSON.stringify(syncData, null, 4);
     get('default-password-length').value = defaultPasswordLength || 16;
@@ -90,7 +93,7 @@ function init(privateKeyHash, syncData, defaultPasswordLength) {
     });
     on('save-default-password-length', 'click', onSaveDefaultPasswordLength);
     on('show-qr-code', 'click', function(event) {
-        togglePrivateKeyQRCode(privateKeyHash);
+        togglePrivateKeyQRCode();
         event.preventDefault();
     });
 }

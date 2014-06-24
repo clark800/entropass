@@ -60,9 +60,10 @@ function onInvalidPassphrase() {
 }
 
 function loadUsername(username, settings) {
-    get('username').value = (username ? username : settings.username) || '';
+    var field = get('username');
+    field.value = (username ? username : settings.username) || '';
     if(username && settings.username && (username !== settings.username))
-        get('username').className += 'warning';
+        field.className += 'warning';
 }
 
 function onPassphraseInput() {
@@ -119,14 +120,27 @@ function onSettings() {
     self.port.emit('close');
 }
 
+function resetPopup() {
+    get('passphrase').value = '';
+    get('username').value = '';
+    get('domain').value = '';
+    get('password-length').value = 16;
+    get('reset-count').innerHTML = '0';
+    get('allow-symbols').checked = true;
+    get('passphrase').setCustomValidity('');
+    get('username').className = '';
+    get('domain').setCustomValidity('');
+    collapseOptions();
+}
+
 function init(domain, username, localSettings, siteSettings) {
+    resetPopup();
     GLOBAL = localSettings;
     GLOBAL.domain = domain;
-    collapseOptions();
-    loadUsername(username, siteSettings);
     get('domain').value = domain;
     get('password-length').value = localSettings.defaultPasswordLength || 16;
     showSettings(siteSettings, SETTINGS);
+    loadUsername(username, siteSettings);
     get('passphrase').focus();
     on('generate-form', 'submit', onInsertPassword);
     on('copy-password', 'click', onCopyPassword);
