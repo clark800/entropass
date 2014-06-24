@@ -40,6 +40,12 @@ function withVerifiedPassword(callback, onFail) {
     var settings = readSettings(SETTINGS);
     if(settings.passwordLength < 6 || settings.passwordLength > 80)
         return;
+    var domainField = get('domain');
+    if(!domainField.value) {
+        domainField.setCustomValidity('Domain must not be empty');
+        domainField.focus();
+        return;
+    }
     var passphrase = get('passphrase').value;
     setValue('passphrase', '');
 
@@ -48,17 +54,14 @@ function withVerifiedPassword(callback, onFail) {
             passphrase, 0, GLOBAL.privateKeyHash, '', true, 80)
         if(passphraseHash === GLOBAL.passphraseHash)
             withPassword(passphrase, settings, callback);
-        else
-            onFail();
+        else {
+            var passphraseField = get('passphrase');
+            passphraseField.setCustomValidity('Different passphrase');
+            passphraseField.focus();
+        }
     } else {
         withPassword(passphrase, settings, callback);
     }
-}
-
-function onInvalidPassphrase() {
-    var field = get('passphrase');
-    field.setCustomValidity('Different passphrase');
-    field.focus();
 }
 
 function loadUsername(username, settings) {
@@ -70,6 +73,10 @@ function loadUsername(username, settings) {
 
 function onPassphraseInput() {
     get('passphrase').setCustomValidity('');
+}
+
+function onDomainInput() {
+    get('domain').setCustomValidity('');
 }
 
 function withPassword(passphrase, settings, callback) {
@@ -85,14 +92,14 @@ function withPassword(passphrase, settings, callback) {
 function onInsertPassword(event) {
     withVerifiedPassword(function(password) {
         self.port.emit('insert-password', password);
-    }, onInvalidPassphrase);
+    });
     event.preventDefault();
 }
 
 function onCopyPassword(event) {
     withVerifiedPassword(function(password) {
         self.port.emit('copy-password', password);
-    }, onInvalidPassphrase);
+    });
     event.preventDefault();
 }
 
@@ -151,6 +158,7 @@ function init(domain, username, localSettings, siteSettings) {
     on('increment-reset-count', 'click', incrementResetCount);
     on('decrement-reset-count', 'click', decrementResetCount);
     on('passphrase', 'input', onPassphraseInput);
+    on('domain', 'input', onDomainInput);
 }
 
 self.port.on('show', init);
