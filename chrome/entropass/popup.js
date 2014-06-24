@@ -76,6 +76,8 @@ function saveSiteSettings(settings) {
             delete settings.resetCount;
         if(settings.allowSymbols === true)
             delete settings.allowSymbols;
+        if(settings.username === '')
+            delete settings.username;
         saveSettings('site:' + domain, settings);
     });
 }

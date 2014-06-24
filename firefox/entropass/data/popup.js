@@ -31,6 +31,8 @@ function saveSiteSettings(settings) {
         delete settings.resetCount;
     if(settings.allowSymbols === true)
         delete settings.allowSymbols;
+    if(settings.username === '')
+        delete settings.username;
     self.port.emit('save-settings', GLOBAL.domain, settings);
 }
 
