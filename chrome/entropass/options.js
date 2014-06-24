@@ -74,6 +74,8 @@ function onSaveDefaultPasswordLength() {
     if(defaultPasswordLength >= 6 && defaultPasswordLength <= 80) {
         var settings = {'defaultPasswordLength': defaultPasswordLength};
         saveSettings('global', settings);
+    } else {
+        alert('Default password length must be between 6 and 80 characters.');
     }
     event.preventDefault();
 }
