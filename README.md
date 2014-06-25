@@ -1,17 +1,12 @@
 entropass
 =========
 
-Next
+Todo
 ----
-* Release firefox add-on
-* Add readme to github with screenshots (popup and options page)
-
-Future
-------
-* Standard synchronization method for all apps
 * Android App
+* Standard synchronization method for all apps
 * Import/export database in options page
-* Allow multiple passphrase hashes
+* Allow multiple passphrase hashes for verifcation
 * Add shift-click and shift-enter option to insert 2 copies of password 
     if passphrase verification is enabled.
 * Only clear clipboard if password is still in it
