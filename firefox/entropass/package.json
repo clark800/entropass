@@ -2,8 +2,8 @@
   "name": "entropass",
   "title": "Entropass",
   "id": "jid1-SBPwvkqNdMRo6w",
-  "description": "Ultra-secure password manager",
-  "author": "Rampant Logic",
-  "license": "",
+  "description": "Maximum-security password manager",
+  "author": "Chris Clark",
+  "license": "MIT",
   "version": "2.1.0"
 }

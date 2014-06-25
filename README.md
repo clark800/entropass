@@ -3,7 +3,6 @@ entropass
 
 Next
 ----
-* Decide on licensing
 * Release firefox add-on
 * Add readme to github with screenshots (popup and options page)
 
