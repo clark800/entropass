@@ -78,6 +78,7 @@ function saveSiteSettings(settings) {
             delete settings.allowSymbols;
         if(settings.username === '')
             delete settings.username;
+        settings.timestamp = Date.now();
         saveSettings('site:' + domain, settings);
     });
 }
@@ -97,6 +98,12 @@ function withVerifiedPassword(callback, onFail) {
     var settings = readSettings(SETTINGS);
     if(settings.passwordLength < 6 || settings.passwordLength > 80)
         return;
+    var domainField = get('domain');
+    if(!domainField.value) {
+        domainField.setCustomValidity('Domain must not be empty');
+        domainField.focus();
+        return;
+    }
     var passphrase = get('passphrase').value;
     setValue('passphrase', '');
 
@@ -141,6 +148,10 @@ function onPassphraseInput() {
     get('passphrase').setCustomValidity('');
 }
 
+function onDomainInput() {
+    get('domain').setCustomValidity('');
+}
+
 function loadUsername(settings) {
     withUsername(function(username) {
         get('username').value = (username ? username : settings.username) || '';
@@ -157,8 +168,9 @@ function init() {
     on('increment-reset-count', 'click', incrementResetCount);
     on('decrement-reset-count', 'click', decrementResetCount);
     on('copy-password', 'click', onCopyPassword);
-    on('passphrase', 'input', onPassphraseInput);
     on('toggle-options', 'click', function() {toggle('options');});
+    on('passphrase', 'input', onPassphraseInput);
+    on('domain', 'input', onDomainInput);
 }
 
 window.onload = init;

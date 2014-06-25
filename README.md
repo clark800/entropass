@@ -3,8 +3,6 @@ entropass
 
 Next
 ----
-* Require domain not empty
-* Store timestamp in site records for future sync feature
 * Decide on licensing
 * Release firefox add-on
 * Add readme to github with screenshots (popup and options page)
@@ -20,3 +18,4 @@ Future
 * Only clear clipboard if password is still in it
 * Submit bug report for public suffix checksum
 * Add validation check on public suffix list
+* Submit bug report for chrome to provide getBaseDomainFromHost

@@ -65,6 +65,7 @@ popup.port.on('resize', function(change) {
 });
 
 popup.port.on('save-settings', function(domain, settings) {
+    settings.timestamp = Date.now();
     ss.storage['site:' + domain] = JSON.stringify(settings);
 });
 
