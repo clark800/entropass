@@ -5,9 +5,7 @@ function setValue(id, value) {
     var element = get(id);
     var nodeName = element.nodeName.toLowerCase();
     var type = element.type ? element.type.toLowerCase() : null;
-    if(nodeName === 'span') {
-        element.innerHTML = value.toString();
-    } else if(nodeName === 'input' && type === 'checkbox') {
+    if(nodeName === 'input' && type === 'checkbox') {
         element.checked = value;
     } else {
         element.value = value;
@@ -18,9 +16,7 @@ function getValue(id) {
     var element = get(id);
     var nodeName = element.nodeName.toLowerCase();
     var type = element.type ? element.type.toLowerCase() : null;
-    if(nodeName === 'span') {
-        return element.innerHTML;
-    } else if(nodeName === 'input' && type === 'checkbox') {
+    if(nodeName === 'input' && type === 'checkbox') {
         return element.checked;
     } else {
         return element.value;

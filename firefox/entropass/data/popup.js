@@ -11,16 +11,16 @@ function toggle(id) {
 }
 
 function getResetCount() {
-    return parseInt(get('reset-count').innerHTML, 10);
+    return parseInt(get('reset-count').value, 10);
 }
 
 function incrementResetCount() {
-    get('reset-count').innerHTML = (getResetCount() + 1).toString();
+    get('reset-count').value = (getResetCount() + 1).toString();
 }
 
 function decrementResetCount() {
     var newValue = Math.max(0, getResetCount() - 1);
-    get('reset-count').innerHTML = newValue.toString();
+    get('reset-count').value = newValue.toString();
 }
 
 function saveSiteSettings(settings) {
@@ -134,7 +134,7 @@ function resetPopup() {
     get('username').value = '';
     get('domain').value = '';
     get('password-length').value = 16;
-    get('reset-count').innerHTML = '0';
+    get('reset-count').value = '0';
     get('allow-symbols').checked = true;
     get('passphrase').setCustomValidity('');
     get('username').className = '';

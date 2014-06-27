@@ -56,6 +56,13 @@ label.checkbox {
     display: inline-block;
     width: 17px;
     text-align: center;
+    border: none;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    -moz-appearance: textfield;
+    background-color: transparent;
 }
 
 #reset-count-control {
