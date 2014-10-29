@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Entropass/FirstViewController.m"
-            timestampString = "436315504.079433"
+            timestampString = "436316334.219591"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
             landmarkName = "-copyPassword:"
             landmarkType = "5">
          </BreakpointContent>

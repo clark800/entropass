@@ -118,6 +118,7 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
 - (IBAction)showPassword:(UIButton *)sender {
     self.passwordDisplay.text = [self generatePassword];
     self.passphrase.text = @"";
+    [self.view endEditing:YES];
 }
 
 - (void)clearPasteboard:(NSTimer *)timer {
@@ -129,6 +130,7 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = [self generatePassword];
     self.passphrase.text = @"";
+    [self.view endEditing:YES];
     [NSTimer scheduledTimerWithTimeInterval:15.0
                                      target:self
                                    selector:@selector(clearPasteboard:)
