@@ -24,8 +24,9 @@
 		1539DC7D192FD42C001E0DB1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1539DC7B192FD42C001E0DB1 /* InfoPlist.strings */; };
 		1539DC7F192FD42C001E0DB1 /* EntropassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1539DC7E192FD42C001E0DB1 /* EntropassTests.m */; };
 		1539DC8B19313736001E0DB1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1539DC8A19313736001E0DB1 /* AVFoundation.framework */; };
-		1554A07619461A9D00377762 /* unlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 1554A07519461A9D00377762 /* unlock.png */; };
-		1554A07819461AD000377762 /* sync.png in Resources */ = {isa = PBXBuildFile; fileRef = 1554A07719461AD000377762 /* sync.png */; };
+		155047521A016ED500451F0E /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 155047511A016ED500451F0E /* icon.png */; };
+		155047541A01710100451F0E /* icon-60.png in Resources */ = {isa = PBXBuildFile; fileRef = 155047531A01710100451F0E /* icon-60.png */; };
+		155047561A01714D00451F0E /* icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 155047551A01714D00451F0E /* icon-120.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,8 +64,9 @@
 		1539DC7E192FD42C001E0DB1 /* EntropassTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EntropassTests.m; sourceTree = "<group>"; };
 		1539DC8819312CFD001E0DB1 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		1539DC8A19313736001E0DB1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		1554A07519461A9D00377762 /* unlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unlock.png; path = "../../../Desktop/Entropass Icons/unlock.png"; sourceTree = "<group>"; };
-		1554A07719461AD000377762 /* sync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sync.png; path = "../../../Desktop/Entropass Icons/sync.png"; sourceTree = "<group>"; };
+		155047511A016ED500451F0E /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		155047531A01710100451F0E /* icon-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-60.png"; sourceTree = "<group>"; };
+		155047551A01714D00451F0E /* icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-120.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,9 +146,10 @@
 		1539DC54192FD42B001E0DB1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1554A07719461AD000377762 /* sync.png */,
-				1554A07519461A9D00377762 /* unlock.png */,
 				1539DC55192FD42B001E0DB1 /* Entropass-Info.plist */,
+				155047531A01710100451F0E /* icon-60.png */,
+				155047551A01714D00451F0E /* icon-120.png */,
+				155047511A016ED500451F0E /* icon.png */,
 				1539DC56192FD42B001E0DB1 /* InfoPlist.strings */,
 				1539DC59192FD42B001E0DB1 /* main.m */,
 				1539DC5B192FD42B001E0DB1 /* Entropass-Prefix.pch */,
@@ -219,6 +222,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Rampant Logic";
 				TargetAttributes = {
+					1539DC49192FD42B001E0DB1 = {
+						DevelopmentTeam = EDRFDK97TN;
+					};
 					1539DC70192FD42C001E0DB1 = {
 						TestTargetID = 1539DC49192FD42B001E0DB1;
 					};
@@ -249,10 +255,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1539DC64192FD42C001E0DB1 /* Main_iPad.storyboard in Resources */,
+				155047561A01714D00451F0E /* icon-120.png in Resources */,
+				155047521A016ED500451F0E /* icon.png in Resources */,
+				155047541A01710100451F0E /* icon-60.png in Resources */,
 				1539DC6C192FD42C001E0DB1 /* Images.xcassets in Resources */,
-				1554A07819461AD000377762 /* sync.png in Resources */,
 				1539DC61192FD42C001E0DB1 /* Main_iPhone.storyboard in Resources */,
-				1554A07619461A9D00377762 /* unlock.png in Resources */,
 				1539DC58192FD42B001E0DB1 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,6 +421,7 @@
 				GCC_PREFIX_HEADER = "Entropass/Entropass-Prefix.pch";
 				INFOPLIST_FILE = "Entropass/Entropass-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -427,6 +435,7 @@
 				GCC_PREFIX_HEADER = "Entropass/Entropass-Prefix.pch";
 				INFOPLIST_FILE = "Entropass/Entropass-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

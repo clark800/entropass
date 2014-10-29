@@ -24,7 +24,7 @@
         const char *string = [privateKeyHash cStringUsingEncoding:NSUTF8StringEncoding];
         NSData *data = [NSData dataWithBytes:string length:privateKeyHash.length];
         uint8_t digest[length];
-        CC_SHA512(data.bytes, data.length, digest);
+        CC_SHA512(data.bytes, (CC_LONG)data.length, digest);
         NSMutableString* fingerprint = [NSMutableString stringWithCapacity:length * 2];
         for(int i = 0; i < length; i++)
             [fingerprint appendFormat:@"%02x", digest[i]];

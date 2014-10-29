@@ -62,7 +62,7 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
     NSUInteger size = [data length] / sizeof(unsigned char);
     unsigned char* array = (unsigned char*) [data bytes];
     unsigned char* result = (unsigned char *)calloc(2 * size + 1, sizeof(unsigned char));
-    b85encode(array, size, result);
+    b85encode(array, (CC_LONG)size, result);
     return [NSString stringWithUTF8String:(const char*)result];
 }
 
