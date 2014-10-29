@@ -28,8 +28,10 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
     int words = bytes/4 + (bytes % 4 == 0 ? 0 : 1);
     for(int i = 0; i < words; i++) {
         unsigned long word = 0;
-        for(int j = 0; j < 4; j++)
-            word |= i*4+j < bytes ? data[i*4+j] << 8*(3-j) : 0;
+        for(int j = 0; j < 4; j++) {
+            unsigned long temp = (i*4+j < bytes) ? data[i*4+j] : 0;
+            word |= temp << 8*(3-j);
+        }
         b85encodeWord(word, result + 5*i);
     }
     result[5*words] = 0;
@@ -39,22 +41,6 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
 {
     self.passphrase.text = @"";
     self.passwordDisplay.text = @"";
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearFields:) name:@"clearFields" object:nil];
-	// Do any additional setup after loading the view, typically from a nib.
-    self.passphrase.delegate = self;
-    self.domain.delegate = self;
-    self.passwordLength.delegate = self;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (NSString*)alphanumeric:(NSData *)data {
@@ -70,7 +56,26 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
     unsigned char* array = (unsigned char*) [data bytes];
     unsigned char* result = (unsigned char *)calloc(2 * size + 1, sizeof(unsigned char));
     b85encode(array, (CC_LONG)size, result);
-    return [NSString stringWithUTF8String:(const char*)result];
+    NSString* retval = [NSString stringWithUTF8String:(const char*)result];
+    free(result);
+    return retval;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearFields:) name:@"clearFields" object:nil];
+	// Do any additional setup after loading the view, typically from a nib.
+    self.passphrase.delegate = self;
+    self.domain.delegate = self;
+    self.passwordLength.delegate = self;
+    NSLog(@"Base85: %@", [self base85:[@"abcdefgh12345678" dataUsingEncoding:NSUTF8StringEncoding]]);
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 - (NSString*)generatePassword {
@@ -161,7 +166,6 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
     if(self.passwordLength.text.intValue > 80)
         self.passwordLength.text = @"80";
     [self.passwordLength resignFirstResponder];
-
 }
 
 @end

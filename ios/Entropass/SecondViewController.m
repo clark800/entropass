@@ -67,6 +67,7 @@
         } else {
             [self savePrivateKeyHash];
         }
+        self.privateKeyHash.text = @"";
     }
 }
 
