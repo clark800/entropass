@@ -23,7 +23,7 @@
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uem-AF-W2m">
-                                <rect key="frame" x="84" y="320" width="39" height="30"/>
+                                <rect key="frame" x="49" y="320" width="39" height="30"/>
                                 <state key="normal" title="Show">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -96,12 +96,21 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="huP-0r-Ewh">
-                                <rect key="frame" x="198" y="320" width="37" height="30"/>
+                                <rect key="frame" x="148" y="320" width="37" height="30"/>
                                 <state key="normal" title="Copy">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="copyPassword:" destination="CZ4-MO-1fc" eventType="touchUpInside" id="nLj-M2-A53"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Krk-KZ-vTV">
+                                <rect key="frame" x="239" y="320" width="46" height="30"/>
+                                <state key="normal" title="Clear">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clearAll:" destination="CZ4-MO-1fc" eventType="touchUpInside" id="gAs-Bl-8HK"/>
                                 </connections>
                             </button>
                         </subviews>

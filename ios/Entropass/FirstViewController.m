@@ -131,6 +131,16 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
                                     repeats:NO];
 }
 
+- (IBAction)clearAll:(UIButton *)sender {
+    self.passphrase.text = @"";
+    self.domain.text = @"";
+    self.passwordLength.text = @"16";
+    self.useSymbols.on = TRUE;
+    self.resetCount.text = @"0";
+    self.resetCountControl.value = 0;
+    self.passwordDisplay.text = @"";
+}
+
 - (IBAction)resetCountChanged:(UIStepper *)sender {
     int value = [sender value];
     self.resetCount.text = [NSString stringWithFormat:@"%d", value];
