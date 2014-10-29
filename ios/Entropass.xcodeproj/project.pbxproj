@@ -27,6 +27,8 @@
 		155047521A016ED500451F0E /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 155047511A016ED500451F0E /* icon.png */; };
 		155047541A01710100451F0E /* icon-60.png in Resources */ = {isa = PBXBuildFile; fileRef = 155047531A01710100451F0E /* icon-60.png */; };
 		155047561A01714D00451F0E /* icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 155047551A01714D00451F0E /* icon-120.png */; };
+		1550475D1A01751A00451F0E /* sync.png in Resources */ = {isa = PBXBuildFile; fileRef = 1550475B1A01751A00451F0E /* sync.png */; };
+		1550475E1A01751A00451F0E /* unlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 1550475C1A01751A00451F0E /* unlock.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		155047511A016ED500451F0E /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		155047531A01710100451F0E /* icon-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-60.png"; sourceTree = "<group>"; };
 		155047551A01714D00451F0E /* icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-120.png"; sourceTree = "<group>"; };
+		1550475B1A01751A00451F0E /* sync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sync.png; sourceTree = "<group>"; };
+		1550475C1A01751A00451F0E /* unlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlock.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +154,8 @@
 				155047531A01710100451F0E /* icon-60.png */,
 				155047551A01714D00451F0E /* icon-120.png */,
 				155047511A016ED500451F0E /* icon.png */,
+				1550475B1A01751A00451F0E /* sync.png */,
+				1550475C1A01751A00451F0E /* unlock.png */,
 				1539DC56192FD42B001E0DB1 /* InfoPlist.strings */,
 				1539DC59192FD42B001E0DB1 /* main.m */,
 				1539DC5B192FD42B001E0DB1 /* Entropass-Prefix.pch */,
@@ -254,12 +260,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1550475D1A01751A00451F0E /* sync.png in Resources */,
 				1539DC64192FD42C001E0DB1 /* Main_iPad.storyboard in Resources */,
 				155047561A01714D00451F0E /* icon-120.png in Resources */,
 				155047521A016ED500451F0E /* icon.png in Resources */,
 				155047541A01710100451F0E /* icon-60.png in Resources */,
 				1539DC6C192FD42C001E0DB1 /* Images.xcassets in Resources */,
 				1539DC61192FD42C001E0DB1 /* Main_iPhone.storyboard in Resources */,
+				1550475E1A01751A00451F0E /* unlock.png in Resources */,
 				1539DC58192FD42B001E0DB1 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -20,7 +20,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dgd-wa-dx5">
                                 <rect key="frame" x="118" y="117" width="182" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uem-AF-W2m">
                                 <rect key="frame" x="84" y="320" width="39" height="30"/>
@@ -107,7 +107,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Generate" image="unlock" selectedImage="unlock" id="u1e-5L-l1D"/>
+                    <tabBarItem key="tabBarItem" title="Generate" image="unlock.png" id="u1e-5L-l1D"/>
                     <connections>
                         <outlet property="domain" destination="dtp-kB-fcu" id="vNy-3E-aLa"/>
                         <outlet property="passphrase" destination="Dgd-wa-dx5" id="NMt-Vb-mnC"/>
@@ -167,7 +167,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Link" image="sync" id="Z7h-1E-pvt"/>
+                    <tabBarItem key="tabBarItem" title="Link" image="sync.png" id="Z7h-1E-pvt"/>
                     <connections>
                         <outlet property="fingerprint" destination="a8H-Qm-cAw" id="rTR-Tv-dxb"/>
                         <outlet property="privateKeyHash" destination="gXl-2x-w4T" id="oTL-ZI-eOr"/>
@@ -198,8 +198,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="sync" width="40" height="40"/>
-        <image name="unlock" width="40" height="40"/>
+        <image name="sync.png" width="40" height="40"/>
+        <image name="unlock.png" width="40" height="40"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

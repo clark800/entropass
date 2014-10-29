@@ -35,9 +35,16 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
     result[5*words] = 0;
 }
 
+- (void)clearFields:(NSNotification *) notification
+{
+    self.passphrase.text = @"";
+    self.passwordDisplay.text = @"";
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearFields:) name:@"clearFields" object:nil];
 	// Do any additional setup after loading the view, typically from a nib.
     self.passphrase.delegate = self;
     self.domain.delegate = self;
@@ -105,6 +112,7 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
 
 - (IBAction)showPassword:(UIButton *)sender {
     self.passwordDisplay.text = [self generatePassword];
+    self.passphrase.text = @"";
 }
 
 - (void)clearPasteboard:(NSTimer *)timer {
@@ -115,6 +123,7 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
 - (IBAction)copyPassword:(UIButton *)sender {
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = [self generatePassword];
+    self.passphrase.text = @"";
     [NSTimer scheduledTimerWithTimeInterval:15.0
                                      target:self
                                    selector:@selector(clearPasteboard:)
