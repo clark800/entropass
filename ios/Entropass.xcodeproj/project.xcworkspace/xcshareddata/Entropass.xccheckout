@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>50312112-983E-42CE-AAFE-03728EFE31C9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Entropass</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>13F9C2F9A1604E2C94F69C565AA917C60F7AC0E7</key>
+		<string>github.com:clark800/entropass.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ios/Entropass.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>13F9C2F9A1604E2C94F69C565AA917C60F7AC0E7</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:clark800/entropass.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>13F9C2F9A1604E2C94F69C565AA917C60F7AC0E7</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>13F9C2F9A1604E2C94F69C565AA917C60F7AC0E7</string>
+			<key>IDESourceControlWCCName</key>
+			<string>entropass</string>
+		</dict>
+	</array>
+</dict>
+</plist>
