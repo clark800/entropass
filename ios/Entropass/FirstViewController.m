@@ -95,8 +95,8 @@ void b85encode(unsigned char* data, int bytes, unsigned char* result) {
     NSString *secret = [NSString stringWithFormat:@"%@%@%@", passphrase, resetCount, privateKeyHash];
     NSData* secretBytes = [secret dataUsingEncoding:NSUTF8StringEncoding];
     NSData* domainBytes = [domain dataUsingEncoding:NSUTF8StringEncoding];
-    unsigned char output[length];
-    unsigned const int byteLength = 64;
+    size_t byteLength = 64;
+    uint8_t output[byteLength];
     CCKeyDerivationPBKDF(kCCPBKDF2, secretBytes.bytes, secretBytes.length, domainBytes.bytes, domainBytes.length, kCCPRFHmacAlgSHA512, rounds, output, byteLength);
     NSData* hash = [NSData dataWithBytes:(const void *)output length:byteLength];
     NSString* encoded = useSymbols ? [self base85:hash] : [self alphanumeric:hash];
