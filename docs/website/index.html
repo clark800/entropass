@@ -101,6 +101,17 @@
             <p>
                 Entropass generates site passwords on the fly using a hashing algorithm based on your master passphrase, private key file, and the domain of the site. The private key is saved in your browser, and the domain is automatically populated, so all you have to do is type in your master passphrase each time you login to a site.
             </p>
+            <h2 class="top-margin">An open standard</h2>
+            <p>
+            Everyone is free to use the Entropass password generation algorithm in their commercial or non-commercial software. It is based entirely on standardized cryptographic technologies that are commonly available in libraries across many languages. This is the pseudocode for the core algorithm:
+            <br/>
+            <code>
+                secret = passphrase + resetCount + sha512(privateKey) <br/>
+                password = b85encode(pbkdf2_hmac('sha512', secret, salt=domain, rounds=100))
+            </code>
+            <br/>
+            The full Python implemenation is just 13 lines of code with no dependencies and is available <a href="https://github.com/clark800/entropass/blob/master/core/entropass.py">here</a>.
+            </p>
 
             <h2 class="top-margin">What is a private key file?</h2>
             <p>
