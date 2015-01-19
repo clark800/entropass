@@ -113,9 +113,39 @@
             The full Python implemenation is just 13 lines of code with no dependencies and is available <a href="https://github.com/clark800/entropass/blob/master/core/entropass.py">here</a>.
             </p>
 
-            <h2 class="top-margin">What is a private key file?</h2>
+            <h2 class="top-margin">Comparison with LastPass and KeePass</h2>
+    
+            <br/>
+            <div class="p">
+            <b>Pros vs. LastPass</b>
+            <ul>
+            <li>No need to trust closed source code
+            <li>No cost for mobile access
+            </ul>
+
+            <b>Pros vs. Keepass</b>
+            <ul>
+            <li>No password database to backup and sync between devices
+            </ul>
+
+            <b>Pros vs. Both</b>
+            <ul>
+            <li>Impossible to brute force: the private key is like adding 80 extra characters to your password
+            </ul>
+
+            <b>Cons</b>
+            <ul>
+            <li>Since Entropass generates passwords for you, you will have to reset each of your website passwords to use Entropass
+            <li>If your master passphrase or private key is compromised, you will have to reset all of your site passwords
+            </ul>
+            </div>
+
+            <h2 class="top-margin">FAQ</h2>
+            <h4>What if I have to reset a site password?</h4>
+            <p>You can increment the reset count to generate a new password for that site.</p>
+            <h4>What is a private key file?</h4>
             <p>
-                You can use any file as a private key, as long as it has never been sent over the internet or shared with anyone else. For example, you could take a picture of yourself or just type a lot of random characters into a text document. Another option is to write a simple program and use the program's output as your private key. The advantage of this is that you can reconstruct your private key if you ever lose all copies of it, as long as you remember how to write the program.
+            You can use any file as a private key, as long as it has never been sent over the internet or shared with anyone else. For example, you could take a picture of yourself or just type a lot of random characters into a text document. Another option is to write a simple program and use the program's output as your private key. The advantage of this is that you can reconstruct your private key if you ever lose all copies of it, as long as you remember how to write the program.
             </p>
         </div>
     </section>
