@@ -17,6 +17,7 @@ input[type="text"], input[type="password"], input[type="number"] {
     padding: 6px;
     margin: 2px;
     width: 210px;
+    height: 15px;
 }
 
 input:invalid,
@@ -35,26 +36,31 @@ label {
     width: 80px;
     text-align: right;
     padding-right: 10px;
+    height: 15px;
 }
 
 label.checkbox {
     width: auto;
     padding-right: 5px;
     text-align: left;
+    height: 15px;
 }
 
 #password-length {
     width: 30px;
+    height: 15px;
 }
 
 #reset-count-label {
     margin-left: 5px;
     width: 90px;
+    height: 15px;
 }
 
 #reset-count {
     display: inline-block;
     width: 17px;
+    height: 15px;
     text-align: center;
     border: none;
     padding-left: 0px;
@@ -76,12 +82,14 @@ label.checkbox {
     padding-left: 3px;
     padding-right: 3px;
     width: 10px;
+    height: 15px;
     display: inline-block;
     text-align: center;
 }
 
 #allow-symbols {
     margin-left: 15px;
+    height: 15px;
 }
 
 .button {
