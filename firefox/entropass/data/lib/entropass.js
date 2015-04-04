@@ -33,7 +33,7 @@ function alphanumeric(wordArray) {
 function generatePassword(passphrase, resetCount, privateKeyHash, domain,
                            allowSymbols, length) {
     var resetCountString = resetCount > 0 ? resetCount.toString() : '';
-    var secret = passphrase + resetCountString + privateKeyHash;
+    var secret = passphrase + resetCountString + (privateKeyHash || '');
     var hash = CryptoJS.PBKDF2(secret, domain, {keySize: 512/32,
                                iterations: 100, hasher: CryptoJS.algo.SHA512});
     var password = allowSymbols ? b85encode(hash) : alphanumeric(hash);

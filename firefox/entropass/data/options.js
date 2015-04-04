@@ -1,4 +1,3 @@
-
 var GLOBAL = {};
 function get(id) { return document.getElementById(id); }
 function on(id, evt, cb) { get(id).addEventListener(evt, cb); }
@@ -27,6 +26,20 @@ function savePrivateKeyHash(privateKeyHash) {
     self.port.emit('save-setting', 'privateKeyHash', privateKeyHash);
     GLOBAL.privateKeyHash = privateKeyHash;
     showPrivateKeyFingerprint(privateKeyHash);
+    alert('Private key saved successfully!');
+}
+
+function confirmOverwritePrivateKey() {
+    var msg = 'Are you sure you want to replace the current private key?';
+    var hash = get('private-key-fingerprint').value;
+    return hash === '' || confirm(msg);
+}
+
+function onEnableBackwardsCompatibility(event) {
+    if(confirmOverwritePrivateKey()) {
+        savePrivateKeyHash('undefined');
+    }
+    event.preventDefault();
 }
 
 function uint8ArrayToWordArray(uint8Array) {
@@ -41,7 +54,7 @@ function savePrivateKey() {
     if(files.length > 0) {
         var reader = new FileReader();
         reader.onload = function() {
-            var uint8Array = new Uint8Array(reader.result);
+            var uint8Array = new unsafeWindow.Uint8Array(reader.result);
             var wordArray = uint8ArrayToWordArray(uint8Array);
             savePrivateKeyHash(sha512(wordArray));
         };
@@ -53,11 +66,9 @@ function savePrivateKey() {
 }
 
 function onSavePrivateKey(event) {
-    var msg = 'Are you sure you want to replace the current private key?';
-    var hash = get('private-key-fingerprint').value;
-    if(hash !== '' && !confirm(msg))
-        return;
-    savePrivateKey();
+    if(confirmOverwritePrivateKey()) {
+        savePrivateKey();
+    }
     event.preventDefault();
 }
 
@@ -88,6 +99,7 @@ function init(privateKeyHash, syncData, defaultPasswordLength) {
     get('sync-data').value = JSON.stringify(syncData, null, 4);
     get('default-password-length').value = defaultPasswordLength || 16;
     on('save-private-key', 'click', onSavePrivateKey);
+    on('enable-compatibility', 'click', onEnableBackwardsCompatibility);
     on('save-passphrase', 'click', function(event) {
         onSavePassphrase(event, privateKeyHash);
     });
