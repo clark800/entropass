@@ -1,8 +1,15 @@
 body {
-    background-color: "#302dd6";
-    color: "#ffffff";
+    background-color: #302dd6;
+    color: #ffffff;
     touch-action: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
+}
+
+.title {
+    margin-top: 10vh;
+    font-size: 16px;
+    font-size: 7vw;
+    text-align: center;
 }
