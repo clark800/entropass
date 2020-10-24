@@ -1,0 +1,8 @@
+body {
+    background-color: "#302dd6";
+    color: "#ffffff";
+    touch-action: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
