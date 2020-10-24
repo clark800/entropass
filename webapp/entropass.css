@@ -9,7 +9,26 @@ body {
 
 .title {
     margin-top: 10vh;
+    margin-bottom: 5vh;
     font-size: 16px;
-    font-size: 7vw;
+    font-size: 10vw;
     text-align: center;
+}
+
+.contents {
+    font-size: 16px;
+    font-size: 6vw;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+input {
+    font-size: 16px;
+    font-size: 6vw;
+    width: 100%;
+    margin-bottom: 2vh;
+}
+
+#password {
+    visibility: hidden;
 }
