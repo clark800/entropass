@@ -1,7 +1,7 @@
 body {
     font-family: "San Francisco", Helvetica, sans-serif;
     background-color: #302dd6;
-    color: #ffffff;
+    color: white;
     touch-action: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
