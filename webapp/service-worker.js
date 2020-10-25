@@ -1,6 +1,6 @@
 const CACHE_NAME = 'entropass-ios-pwa-v1';
 
-const CACHE_FILES = [
+const CACHE_URLS = [
     'manifest.webmanifest',
     'index.html',
     'entropass.css',
@@ -13,24 +13,45 @@ function uncachedFetch(request) {
     return fetch(request, { cache: 'no-cache' });
 }
 
-function download() {
-    return caches.open(CACHE_NAME).then(cache => cache.addAll(CACHE_FILES))
+function withCache(resolve) {
+    return caches.open(CACHE_NAME).then(resolve);
+}
+
+function fetchAndCache(request, cache) {
+    return fetch(request).then(response => {
+        if (!response.ok)
+            throw new TypeError('bad response status');
+        return cache.put(request, response.clone()).then(_ => response);
+    });
+}
+
+function cachedFetch(request, cache) {
+    return cache.match(request).then(response =>
+        response || fetchAndCache(request, cache))
+}
+
+// this will update all files in the cache if we can retrieve them
+function download(cache) {
+    return cache.addAll(CACHE_URLS);
+}
+
+// this will ensure that all files are cached, but not update cached files
+function cacheAll(cache) {
+    return Promise.all(CACHE_URLS.map(url => cachedFetch(url, cache)));
 }
 
 // install event fires when the service worker is successfully registered
-// which happens each time the app is restarted. this will update all files
-// in the cache if we can retrieve them.
+// which happens each time the app is restarted
 self.addEventListener('install', event => {
-    event.waitUntil(download());
+    event.waitUntil(withCache(cacheAll));
 });
 
 function clearStaleCaches(keep) {
-    return caches.keys().then(keys => {
-        return Promise.all(keys.map(key => {
-            if (key !== keep)
-                return caches.delete(key);
-        }));
-    });
+    return caches.keys().then(keys =>
+        Promise.all(keys.map(key =>
+            key === keep ? Promise.resolve(false) : caches.delete(key)
+        ))
+    );
 }
 
 self.addEventListener('activate', event => {
@@ -38,13 +59,8 @@ self.addEventListener('activate', event => {
     clearStaleCaches(CACHE_NAME);
 });
 
-function cachedFetch(event) {
-    return caches.open(CACHE_NAME).then(cache =>
-        cache.match(event.request).then(response =>
-            response || fetch(event.request)));
-}
-
 self.addEventListener('fetch', event => {
-    if (event.request.method === 'GET')
-        event.respondWith(cachedFetch(event));
+    const request = event.request;
+    if (request.method === 'GET')
+        event.respondWith(withCache(cache => cachedFetch(request, cache)));
 });
