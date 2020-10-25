@@ -10,7 +10,7 @@ function selectText(element) {
         var selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(range);
-        element.setSelectionRange(0, 65535);
+        element.setSelectionRange(0, element.value.length);
     } else {
         element.select();
     }
@@ -25,6 +25,8 @@ function copyToClipboard(element) {
 }
 
 function copyText(text) {
+    // note: navigator.clipboard.writeText is simpler, but requires that the
+    // webapp be hosted with https and isn't available in older versions of iOS
     var element = document.getElementById('password');
     element.value = text;
     copyToClipboard(element);
