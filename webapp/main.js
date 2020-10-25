@@ -40,3 +40,13 @@ function copyText(text) {
     copyToClipboard(element);
     element.value = '';
 }
+
+if (navigator.serviceWorker) {
+    navigator.serviceWorker.register('service-worker.js').then(registration =>
+        console.log('ServiceWorker registration succeeded', registration)
+    ).catch(error =>
+        alert('ServiceWorker registration failed: ' + error.toString())
+    );
+} else {
+    alert('navigator.serviceWorker not available');
+}
