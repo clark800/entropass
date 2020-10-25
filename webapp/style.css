@@ -14,20 +14,22 @@ body {
 .page {
     display: none;
     height: 100vh;
-    width: 100%;
+    width: 100vw;
     min-height: 100vh;
     max-height: 100vh;
+    min-width: 100vw;
+    max-width: 100vw;
 }
 
 .header {
-    height: 25vh;
+    height: 20vh;
     padding-top: 10vh;
     font-size: 10vmin;
     text-align: center;
 }
 
 .contents {
-    height: 70vh;
+    height: 80vh;
     font-size: 5vmin;
     margin-left: 10%;
     margin-right: 10%;
@@ -66,7 +68,7 @@ input {
 }
 
 input[type=text], input[type=password] {
-    height: 10vh;
+    height: 8vh;
     padding: 0.5em;
     background-color: transparent;
     color: white;
@@ -79,23 +81,23 @@ input[type=text], input[type=password] {
 }
 
 input[type=number] {
-    height: 10vh;
+    height: 6vh;
     background-color: transparent;
     color: white;
     width: 25%;
-}
-
-input[type=submit] {
-    margin-top: 5vh;
-    height: 10vh;
-    width: 100%;
-    background-color: white;
-    color: #302dd6;
-    -webkit-appearance: none;
 }
 
 input[type=checkbox] {
     width: 4vmin;
     height: 4vmin;
     border-radius: 10%;
+}
+
+input[type=submit] {
+    margin-top: 4vh;
+    height: 8vh;
+    width: 100%;
+    background-color: white;
+    color: #302dd6;
+    -webkit-appearance: none;
 }

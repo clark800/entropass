@@ -70,8 +70,18 @@ function setup() {
     }
 }
 
+function checkClipboard(event) {
+    if (event.target.value.length === 0 && 'clipboard' in navigator) {
+        return navigator.clipboard.readText().then(text => {
+            const hostname = (new URL(text)).hostname;
+            event.target.value = hostname;
+        }).catch(error => console.error('Error reading clipboard:', error));
+    }
+}
+
 function onLoad() {
     const privateKeyHash = window.localStorage.getItem('privateKeyHash');
+    document.getElementById('domain').addEventListener('click', checkClipboard);
     goToPage(privateKeyHash === null ? 'setup-page' : 'generate-page');
     setup();
 }
