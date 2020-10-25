@@ -18,7 +18,7 @@
         <input type="text" id="domain"/>
         <label for="passphrase">Passphrase</label>
         <input type="password" id="passphrase"/>
-        <div id="toggle-options" onclick="toggleOptions()">Options</div>
+        <div id="toggle-options" onclick="toggle('options')">Options</div>
         <div id="options" style="display: none;">
             <div class="option">
                 <label for="password-length">Length</label>
@@ -33,9 +33,7 @@
                 <input type="checkbox" id="allow-symbols" checked/>
             </div>
         </div>
-        <input class="button" type="submit" value="Copy"
-            onclick="copyText('ok')" />
-        <input type="text" id="password" />
+        <input class="button" type="submit" value="Copy" onclick="copyText('ok')" />
     </form>
 </div>
 </body>

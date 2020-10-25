@@ -1,52 +1,21 @@
 
-function toggleOptions() {
-    var element = document.getElementById('options');
+function toggle(id) {
+    var element = document.getElementById(id);
     if (element.style.display == 'none')
         element.style.display = 'block';
     else element.style.display = 'none';
 }
 
-function isiOS() {
-    return /iPad|iPhone|iPod/.test(navigator.platform)
-}
-
-function selectText(element) {
-    if (isiOS()) {
-        var range = document.createRange();
-        range.selectNodeContents(element);
-
-        var selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
-        element.setSelectionRange(0, element.value.length);
-    } else {
-        element.select();
-    }
-}
-
-function copyToClipboard(element) {
-    element.style.visibility = 'visible';
-    selectText(element);
-    document.execCommand('copy');
-    element.blur();
-    element.style.visibility = 'hidden';
-}
-
 function copyText(text) {
-    // note: navigator.clipboard.writeText is simpler, but requires that the
-    // webapp be hosted with https and isn't available in older versions of iOS
-    var element = document.getElementById('password');
-    element.value = text;
-    copyToClipboard(element);
-    element.value = '';
+    return navigator.clipboard.writeText(text);
 }
 
 if (navigator.serviceWorker) {
-    navigator.serviceWorker.register('service-worker.js').then(registration =>
-        console.log('ServiceWorker registration succeeded', registration)
-    ).catch(error =>
-        alert('ServiceWorker registration failed: ' + error.toString())
-    );
+    navigator.serviceWorker.register('service-worker.js').then(registration => {
+        console.log('ServiceWorker registration successful', registration)
+    }).catch(error => {
+        alert('Error: ServiceWorker registration failed: ' + error.toString());
+    });
 } else {
-    alert('navigator.serviceWorker not available');
+    alert('Error: navigator.serviceWorker not available');
 }
