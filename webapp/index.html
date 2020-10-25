@@ -6,6 +6,10 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" type="text/css" href="entropass.css">
 <link rel="apple-touch-icon" href="icon.png">
+<script type="text/javascript" src="lib/pbkdf2.js"></script>
+<script type="text/javascript" src="lib/sha512.js"></script>
+<script type="text/javascript" src="lib/base64.js"></script>
+<script type="text/javascript" src="lib/entropass.js"></script>
 <script type="text/javascript" src="main.js"></script>
 <!-- <link rel="apple-touch-startup-image" href="launch.png"> -->
 <title>Entropass</title>
@@ -33,7 +37,7 @@
                 <input type="checkbox" id="allow-symbols" checked/>
             </div>
         </div>
-        <input class="button" type="submit" value="Copy" onclick="copyText('ok')" />
+        <input class="button" type="submit" value="Copy" onclick="copyPassword();" />
     </form>
 </div>
 </body>

@@ -2,11 +2,18 @@ const CACHE_NAME = 'entropass-ios-pwa-v1';
 
 const CACHE_URLS = [
     'manifest.webmanifest',
+    'icon.png',
     'index.html',
     'entropass.css',
     'main.js',
     'service-worker.js',
-    'icon.png'
+    'lib/typedarrays.js',
+    'lib/base64.js',
+    'lib/pbkdf2.js',
+    'lib/sha512.js',
+    'lib/entropass.js',
+    'lib/punycode.js',
+    'lib/publicsuffix.js'
 ];
 
 function uncachedFetch(request) {
