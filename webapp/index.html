@@ -15,30 +15,52 @@
 <title>Entropass</title>
 </head>
 <body>
-<div class="title">Entropass</div>
-<div class="contents">
-    <form id="generate-form" onsubmit="return false;">
-        <label for="domain">Domain</label>
-        <input type="text" id="domain"/>
-        <label for="passphrase">Passphrase</label>
-        <input type="password" id="passphrase"/>
-        <div id="toggle-options" onclick="toggle('options')">Options</div>
-        <div id="options" style="display: none;">
-            <div class="option">
-                <label for="password-length">Length</label>
-                <input type="number" min="6" max="80" id="password-length" value="16"/>
-            </div>
-            <div class="option">
-                <label for="reset-count" id="reset-count-label">Resets</label>
-                <input type="number" min="0" id="reset-count" value="0">
-            </div>
-            <div class="option">
-                <label for="allow-symbols" class="checkbox">Symbols</label>
-                <input type="checkbox" id="allow-symbols" checked/>
-            </div>
-        </div>
-        <input class="button" type="submit" value="Copy" onclick="copyPassword();" />
-    </form>
+
+<div class="page" id="setup-page">
+    <div class="header">Entropass</div>
+    <div class="contents">
+        <form id="setup-form" onsubmit="return false;">
+            <label for="private-key-hash">Private Key Hash</label>
+            <input type="text" id="private-key-hash"/>
+            <input class="button" type="submit" value="Save" onclick="save();"/>
+        </form>
+    </div>
+    <div class="footer">
+        <div id="version">v0.1.0</div>
+    </div>
 </div>
+
+</div>
+<div class="page" id="generate-page">
+    <div class="header">Entropass</div>
+    <div class="contents">
+        <form id="generate-form" onsubmit="return false;">
+            <label for="domain">Domain</label>
+            <input type="text" id="domain"/>
+            <label for="passphrase">Passphrase</label>
+            <input type="password" id="passphrase"/>
+            <div id="toggle-options" onclick="toggle('options')">Options</div>
+            <div id="options">
+                <div class="option">
+                    <label for="password-length">Length</label>
+                    <input type="number" min="6" max="80" id="password-length"
+                        value="16"/>
+                </div>
+                <div class="option">
+                    <label for="reset-count" id="reset-count-label">
+                        Resets
+                    </label>
+                    <input type="number" min="0" id="reset-count" value="0">
+                </div>
+                <div class="option">
+                    <label for="allow-symbols" class="checkbox">Symbols</label>
+                    <input type="checkbox" id="allow-symbols" checked/>
+                </div>
+            </div>
+            <input class="button" type="submit" value="Copy" onclick="copy();"/>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

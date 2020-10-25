@@ -1,33 +1,79 @@
 
+function isHidden(element) {
+    return element.style.display === 'none';
+}
+
+function show(element) {
+    element.style.display = 'block';
+}
+
+function hide(element) {
+    element.style.display = 'none';
+}
+
 function toggle(id) {
-    var element = document.getElementById(id);
-    if (element.style.display === 'none')
-        element.style.display = 'block';
-    else element.style.display = 'none';
+    const element = document.getElementById(id);
+    if (isHidden(element))
+        show(element);
+    else
+        hide(element);
 }
 
-function copyText(text) {
-    return navigator.clipboard.writeText(text);
+function goToPage(id) {
+    Array.from(document.getElementsByClassName('page')).map(hide);
+    show(document.getElementById(id));
 }
 
-function copyPassword() {
-    const passphrase = document.getElementById('passphrase').value;
-    const domain = document.getElementById('domain').value;
-    const privateKeyHash = '';
-    const length = parseInt(document.getElementById('password-length').value, 10);
-    const resetCount = parseInt(document.getElementById('reset-count').value, 10);
-    const allowSymbols = document.getElementById('allow-symbols').checked;
-    const password = generatePassword(passphrase, resetCount, privateKeyHash,
-        domain, allowSymbols, length);
-    return copyText(password);
+function parseInputs() {
+    return {
+        passphrase: document.getElementById('passphrase').value,
+        domain: document.getElementById('domain').value,
+        privateKeyHash: window.localStorage.getItem('privateKeyHash'),
+        length: parseInt(document.getElementById('password-length').value, 10),
+        resetCount: parseInt(document.getElementById('reset-count').value, 10),
+        allowSymbols: document.getElementById('allow-symbols').checked
+    }
 }
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js').catch(error => {
-        console.error('ServiceWorker registration failed:', error);
-        alert('Error: ServiceWorker registration failed: ' + error.toString());
-    });
-} else {
-    console.error('navigator.serviceWorker not available');
-    alert('Error: navigator.serviceWorker not available');
+function copy() {
+    const inputs = parseInputs();
+    const password = generatePassword(inputs.passphrase, inputs.resetCount,
+        inputs.privateKeyHash, inputs.domain, inputs.allowSymbols,
+        inputs.length);
+    return navigator.clipboard.writeText(password);
 }
+
+function save() {
+    const element = document.getElementById('private-key-hash');
+    const privateKeyHash = element.value.toLowerCase();
+    if (privateKeyHash.match(/^[a-f0-9]{128}$/)) {
+        window.localStorage.setItem('privateKeyHash', privateKeyHash);
+        goToPage('generate-page');
+    } else if (privateKeyHash === 'skip') {
+        window.localStorage.setItem('privateKeyHash', '');
+        goToPage('generate-page');
+    } else {
+        alert('Invalid private key hash');
+    }
+}
+
+function setup() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js').catch(error => {
+            console.error('ServiceWorker registration failed:', error);
+            alert('Error: ServiceWorker registration failed: ' +
+                error.toString());
+        });
+    } else {
+        console.error('navigator.serviceWorker not available');
+        alert('Error: navigator.serviceWorker not available');
+    }
+}
+
+function onLoad() {
+    const privateKeyHash = window.localStorage.getItem('privateKeyHash');
+    goToPage(privateKeyHash === null ? 'setup-page' : 'generate-page');
+    setup();
+}
+
+window.addEventListener('load', onLoad);

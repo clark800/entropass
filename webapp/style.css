@@ -6,21 +6,47 @@ body {
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
-.title {
-    margin-top: 10vh;
-    margin-bottom: 5vh;
-    font-size: 16px;
-    font-size: 10vw;
+.page {
+    display: none;
+    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
+    max-height: 100vh;
+}
+
+.header {
+    height: 25vh;
+    padding-top: 10vh;
+    font-size: 10vmin;
     text-align: center;
 }
 
 .contents {
-    font-size: 16px;
-    font-size: 6vw;
+    height: 70vh;
+    font-size: 5vmin;
     margin-left: 10%;
     margin-right: 10%;
+}
+
+.footer {
+    height: 5vh;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+}
+
+#version {
+    font-size: 2vh;
+}
+
+#options {
+    display: none;
 }
 
 #toggle-options {
@@ -36,12 +62,11 @@ input {
     outline: none;
     border: 2px solid white;
     border-radius: 0.2em;
-    font-size: 16px;
-    font-size: 6vw;
+    font-size: 5vmin;
 }
 
 input[type=text], input[type=password] {
-    height: 2em;
+    height: 10vh;
     padding: 0.5em;
     background-color: transparent;
     color: white;
@@ -54,6 +79,7 @@ input[type=text], input[type=password] {
 }
 
 input[type=number] {
+    height: 10vh;
     background-color: transparent;
     color: white;
     width: 25%;
@@ -61,7 +87,7 @@ input[type=number] {
 
 input[type=submit] {
     margin-top: 5vh;
-    height: 2em;
+    height: 10vh;
     width: 100%;
     background-color: white;
     color: #302dd6;
@@ -69,11 +95,7 @@ input[type=submit] {
 }
 
 input[type=checkbox] {
-    width: 4vw;
-    height: 4vw;
+    width: 4vmin;
+    height: 4vmin;
     border-radius: 10%;
-}
-
-#password {
-    visibility: hidden;
 }
