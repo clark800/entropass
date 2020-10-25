@@ -1,4 +1,5 @@
 body {
+    font-family: "San Francisco", Helvetica, sans-serif;
     background-color: #302dd6;
     color: #ffffff;
     touch-action: none;
@@ -22,11 +23,55 @@ body {
     margin-right: 10%;
 }
 
+#toggle-options {
+    margin-bottom: 2vh;
+}
+
+.option {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
 input {
+    outline: none;
+    border: 2px solid white;
+    border-radius: 0.2em;
     font-size: 16px;
     font-size: 6vw;
+}
+
+input[type=text], input[type=password] {
+    height: 2em;
+    padding: 0.5em;
+    background-color: transparent;
+    color: white;
     width: 100%;
-    margin-bottom: 2vh;
+    margin-top: 0.2em;
+    margin-bottom: 1em;
+    appearance: none;
+    -webkit-appearance: none;
+    background-clip: padding-box;
+}
+
+input[type=number] {
+    background-color: transparent;
+    color: white;
+    width: 25%;
+}
+
+input[type=submit] {
+    margin-top: 5vh;
+    height: 2em;
+    width: 100%;
+    background-color: white;
+    color: #302dd6;
+    -webkit-appearance: none;
+}
+
+input[type=checkbox] {
+    width: 4vw;
+    height: 4vw;
+    border-radius: 10%;
 }
 
 #password {

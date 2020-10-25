@@ -1,3 +1,11 @@
+
+function toggleOptions() {
+    var element = document.getElementById('options');
+    if (element.style.display == 'none')
+        element.style.display = 'block';
+    else element.style.display = 'none';
+}
+
 function isiOS() {
     return /iPad|iPhone|iPod/.test(navigator.platform)
 }
