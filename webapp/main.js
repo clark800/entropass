@@ -43,8 +43,25 @@ function clearInputs() {
     document.getElementById('allow-symbols').checked = true;
 }
 
+function getPassphraseFingerprint(passphrase) {
+    return generatePassword(passphrase, 0, null, '', false, 4);
+}
+
+function isValidPassphrase(passphrase) {
+    const fingerprint = localStorage.getItem('passphrase-fingerprint');
+    if (!fingerprint)
+        return true;
+    return getPassphraseFingerprint(passphrase) === fingerprint;
+}
+
 function copy() {
     const inputs = parseInputs();
+    if (!isValidPassphrase(inputs.passphrase)) {
+        alert('Incorrect passphrase');
+        document.getElementById('passphrase').value = '';
+        document.getElementById('passphrase').focus();
+        return;
+    }
     clearInputs();
     const password = generatePassword(inputs.passphrase, inputs.resetCount,
         inputs.privateKeyHash, inputs.domain, inputs.allowSymbols,
@@ -53,6 +70,12 @@ function copy() {
 }
 
 function save() {
+    const passphrase = document.getElementById('setup-passphrase').value;
+    if (passphrase.length > 0) {
+        const fingerprint = getPassphraseFingerprint(passphrase);
+        localStorage.setItem('passphrase-fingerprint', fingerprint);
+    }
+
     const element = document.getElementById('private-key-hash');
     const privateKeyHash = element.value.toLowerCase();
     if (privateKeyHash.match(/^[a-f0-9]{128}$/)) {
@@ -104,7 +127,7 @@ function initPublicSuffixList() {
         updatePublicSuffixList();
 }
 
-function setup() {
+function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js').catch(error => {
             console.error('ServiceWorker registration failed:', error);
@@ -142,7 +165,7 @@ function onLoad() {
     element.focus();
     element.addEventListener('click', checkClipboard);
     goToPage(privateKeyHash === null ? 'setup-page' : 'generate-page');
-    setup();
+    registerServiceWorker();
     initPublicSuffixList();
 }
 
