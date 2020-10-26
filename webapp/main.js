@@ -159,11 +159,30 @@ function checkClipboard(event) {
     }
 }
 
+function smoothScrollToTop(pixelsPerMs) {
+    // note: 'behavior' parameter of scrollTo does not yet work on iOS
+    window.scrollTo({top: Math.max(window.scrollY - pixelsPerMs, 0)});
+    if (window.scrollY > 0)
+        setTimeout(() => smoothScrollToTop(pixelsPerMs), 1);
+}
+
+function onBlur(event) {
+    // scroll to top after soft keyboard closes
+    // wait and make sure another input didn't get focus
+    setTimeout(() => {
+        const active = document.activeElement;
+        if (!active || active.tagName !== 'INPUT')
+            smoothScrollToTop(10);
+    }, 10);
+}
+
 function onLoad() {
     const privateKeyHash = localStorage.getItem('privateKeyHash');
     const element = document.getElementById('domain');
     element.focus();
     element.addEventListener('click', checkClipboard);
+    Array.from(document.getElementsByTagName('input')).map(element =>
+        element.addEventListener('blur', onBlur));
     goToPage(privateKeyHash === null ? 'setup-page' : 'generate-page');
     registerServiceWorker();
     initPublicSuffixList();
