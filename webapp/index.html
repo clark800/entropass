@@ -23,7 +23,8 @@
     <div class="contents">
         <form id="setup-form" onsubmit="return false;">
             <label for="private-key-hash">Private Key Hash</label>
-            <input type="text" id="private-key-hash"/>
+            <input type="text" id="private-key-hash"
+                autocorrect="off" autocapitalize="none"/>
             <label for="setup-passphrase">Passphrase</label>
             <input type="password" id="setup-passphrase"/>
             <input class="button" type="submit" value="Save" onclick="save();"/>
@@ -40,7 +41,8 @@
     <div class="contents">
         <form id="generate-form" onsubmit="return false;">
             <label for="domain">Domain</label>
-            <input type="text" id="domain"/>
+            <input type="text" id="domain" inputmode="url"
+                autocorrect="off" autocapitalize="none"/>
             <label for="passphrase">Passphrase</label>
             <input type="password" id="passphrase"/>
             <div id="toggle-options" onclick="toggle('options')">Options</div>
