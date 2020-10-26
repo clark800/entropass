@@ -16,10 +16,6 @@ const CACHE_URLS = [
     'lib/publicsuffix.js'
 ];
 
-function uncachedFetch(request) {
-    return fetch(request, { cache: 'no-cache' });
-}
-
 function withCache(resolve) {
     return caches.open(CACHE_NAME).then(resolve);
 }

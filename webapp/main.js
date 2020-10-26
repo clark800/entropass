@@ -28,15 +28,24 @@ function parseInputs() {
     return {
         passphrase: document.getElementById('passphrase').value,
         domain: document.getElementById('domain').value,
-        privateKeyHash: window.localStorage.getItem('privateKeyHash'),
+        privateKeyHash: localStorage.getItem('privateKeyHash'),
         length: parseInt(document.getElementById('password-length').value, 10),
         resetCount: parseInt(document.getElementById('reset-count').value, 10),
         allowSymbols: document.getElementById('allow-symbols').checked
     }
 }
 
+function clearInputs() {
+    document.getElementById('domain').value = '';
+    document.getElementById('passphrase').value = '';
+    document.getElementById('password-length').value = '16';
+    document.getElementById('reset-count').value = '0';
+    document.getElementById('allow-symbols').checked = true;
+}
+
 function copy() {
     const inputs = parseInputs();
+    clearInputs();
     const password = generatePassword(inputs.passphrase, inputs.resetCount,
         inputs.privateKeyHash, inputs.domain, inputs.allowSymbols,
         inputs.length);
@@ -47,14 +56,52 @@ function save() {
     const element = document.getElementById('private-key-hash');
     const privateKeyHash = element.value.toLowerCase();
     if (privateKeyHash.match(/^[a-f0-9]{128}$/)) {
-        window.localStorage.setItem('privateKeyHash', privateKeyHash);
+        localStorage.setItem('privateKeyHash', privateKeyHash);
         goToPage('generate-page');
     } else if (privateKeyHash === 'skip') {
-        window.localStorage.setItem('privateKeyHash', '');
+        localStorage.setItem('privateKeyHash', '');
         goToPage('generate-page');
     } else {
         alert('Invalid private key hash');
     }
+}
+
+function getPublicSuffixListAge() {
+    // returns age of cached public suffix list in days
+    const now = new Date();
+    const timestamp = localStorage.getItem('public-suffix-list-timestamp');
+    if (!timestamp)
+        return Infinity;
+    const then = Date.parse(timestamp)
+    return Math.floor((now - then) / (1000 * 60 * 60 * 24));
+}
+
+function updatePublicSuffixList() {
+    // the publicsuffix.org source does not permit cross-origin access
+    //const url = 'https://publicsuffix.org/list/public_suffix_list.dat';
+    const url = 'https://raw.githubusercontent.com/publicsuffix/list' +
+                '/master/public_suffix_list.dat'
+
+    console.log('Fetching public suffix list');
+    return fetch(url, { cache: 'no-cache' }).then(response => {
+        if (!response.ok)
+            return console.error('Bad response to public suffix list fetch');
+        return response.text().then(data => {
+            console.log('Saving and loading latest public suffix list');
+            localStorage.setItem('public-suffix-list', data);
+            localStorage.setItem('public-suffix-list-timestamp', new Date());
+            loadPublicSuffixList(data);
+        })
+    }).catch(error => console.error('Public suffix list fetch failed:', error));
+}
+
+function initPublicSuffixList() {
+    const data = localStorage.getItem('public-suffix-list');
+    // first load cached version, then attempt to update and reload
+    if (data)
+        loadPublicSuffixList(data);
+    if (!data || getPublicSuffixListAge() > 30)
+        updatePublicSuffixList();
 }
 
 function setup() {
@@ -70,20 +117,33 @@ function setup() {
     }
 }
 
+function getBaseDomain(hostname) {
+    // getBaseDomainFromHost is defined by the public suffix library after
+    // loadPublicSuffixList is called, but this is only called if we have the
+    // public suffix list downloaded, which is not guaranteed
+    if (typeof globalThis.getBaseDomainFromHost === 'function')
+        return getBaseDomainFromHost(hostname);   // uses public suffix list
+    return hostname;
+}
+
 function checkClipboard(event) {
     if (event.target.value.length === 0 && 'clipboard' in navigator) {
         return navigator.clipboard.readText().then(text => {
             const hostname = (new URL(text)).hostname;
-            event.target.value = hostname;
+            event.target.value = getBaseDomain(hostname);
+            document.getElementById('passphrase').focus();
         }).catch(error => console.error('Error reading clipboard:', error));
     }
 }
 
 function onLoad() {
-    const privateKeyHash = window.localStorage.getItem('privateKeyHash');
-    document.getElementById('domain').addEventListener('click', checkClipboard);
+    const privateKeyHash = localStorage.getItem('privateKeyHash');
+    const element = document.getElementById('domain');
+    element.focus();
+    element.addEventListener('click', checkClipboard);
     goToPage(privateKeyHash === null ? 'setup-page' : 'generate-page');
     setup();
+    initPublicSuffixList();
 }
 
-window.addEventListener('load', onLoad);
+addEventListener('load', onLoad);
