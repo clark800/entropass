@@ -47,11 +47,12 @@ function getPassphraseFingerprint(passphrase) {
     return generatePassword(passphrase, 0, null, '', false, 4);
 }
 
-function isValidPassphrase(passphrase) {
-    const fingerprint = localStorage.getItem('passphrase-fingerprint');
-    if (!fingerprint)
-        return true;
-    return getPassphraseFingerprint(passphrase) === fingerprint;
+function validatePassphrase(passphrase) {
+    const storedFingerprint = localStorage.getItem('passphrase-fingerprint');
+    if (!storedFingerprint)
+        return Promise.resolve(true);
+    return getPassphraseFingerprint(passphrase).then(fingerprint =>
+        fingerprint === storedFingerprint);
 }
 
 function copy() {
@@ -62,17 +63,20 @@ function copy() {
         document.getElementById('password-length').focus();
         return;
     }
-    if (!isValidPassphrase(inputs.passphrase)) {
-        alert('Incorrect passphrase');
-        document.getElementById('passphrase').value = '';
-        document.getElementById('passphrase').focus();
-        return;
-    }
-    clearInputs();
-    const password = generatePassword(inputs.passphrase, inputs.resetCount,
-        inputs.privateKeyHash, inputs.domain, inputs.allowSymbols,
-        inputs.length);
-    return navigator.clipboard.writeText(password);
+    return validatePassphrase(inputs.passphrase).then(validated => {
+        if (!validated) {
+            alert('Incorrect passphrase');
+            document.getElementById('passphrase').value = '';
+            document.getElementById('passphrase').focus();
+            return;
+        }
+        clearInputs();
+        return generatePassword(inputs.passphrase, inputs.resetCount,
+            inputs.privateKeyHash, inputs.domain, inputs.allowSymbols,
+            inputs.length).then(password => {
+                navigator.clipboard.writeText(password);
+            });
+    });
 }
 
 function save() {
