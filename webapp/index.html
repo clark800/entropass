@@ -49,14 +49,15 @@
             <div id="options">
                 <div class="option">
                     <label for="password-length">Length</label>
-                    <input type="number" min="6" max="80" id="password-length"
-                        value="16"/>
+                    <input type="number" id="password-length" pattern="[0-9]*"
+                        inputmode="number" min="6" max="80" value="16"/>
                 </div>
                 <div class="option">
                     <label for="reset-count" id="reset-count-label">
                         Resets
                     </label>
-                    <input type="number" min="0" id="reset-count" value="0">
+                    <input type="number" id="reset-count" pattern="[0-9]*"
+                        inputmode="number" min="0" value="0">
                 </div>
                 <div class="option">
                     <label for="allow-symbols" class="checkbox">Symbols</label>

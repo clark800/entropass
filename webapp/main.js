@@ -56,6 +56,12 @@ function isValidPassphrase(passphrase) {
 
 function copy() {
     const inputs = parseInputs();
+    if (inputs.length < 6 || inputs.length > 80) {
+        alert('Invalid password length');
+        show(document.getElementById('options'));
+        document.getElementById('password-length').focus();
+        return;
+    }
     if (!isValidPassphrase(inputs.passphrase)) {
         alert('Incorrect passphrase');
         document.getElementById('passphrase').value = '';
