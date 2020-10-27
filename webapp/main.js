@@ -82,8 +82,9 @@ function copy() {
 function save() {
     const passphrase = document.getElementById('setup-passphrase').value;
     if (passphrase.length > 0) {
-        const fingerprint = getPassphraseFingerprint(passphrase);
-        localStorage.setItem('passphrase-fingerprint', fingerprint);
+        getPassphraseFingerprint(passphrase).then(fingerprint => {
+            localStorage.setItem('passphrase-fingerprint', fingerprint);
+        });
     }
 
     const element = document.getElementById('private-key-hash');
