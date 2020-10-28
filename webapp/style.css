@@ -101,3 +101,7 @@ input[type=submit] {
     color: #302dd6;
     -webkit-appearance: none;
 }
+
+input[type=submit]:active, input[type=submit]:focus {
+    background-color: #c7dafc;
+}

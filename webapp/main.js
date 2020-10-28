@@ -51,10 +51,13 @@ function isValidPassphrase(passphrase) {
     const fingerprint = localStorage.getItem('passphrase-fingerprint');
     if (!fingerprint)
         return true;
+    if (passphrase.length === 0)
+        return false;    // hashing doesn't work on an empty string
     return getPassphraseFingerprint(passphrase) === fingerprint;
 }
 
 function copy() {
+    event.target.blur();
     const inputs = parseInputs();
     if (inputs.length < 6 || inputs.length > 80) {
         alert('Invalid password length');
@@ -76,6 +79,7 @@ function copy() {
 }
 
 function save() {
+    event.target.blur();
     const passphrase = document.getElementById('setup-passphrase').value;
     if (passphrase.length > 0) {
         const fingerprint = getPassphraseFingerprint(passphrase);
