@@ -1,0 +1,107 @@
+body {
+    font-family: "San Francisco", Helvetica, sans-serif;
+    background-color: #302dd6;
+    color: white;
+    touch-action: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.page {
+    display: none;
+    height: 100vh;
+    width: 100vw;
+    min-height: 100vh;
+    max-height: 100vh;
+    min-width: 100vw;
+    max-width: 100vw;
+}
+
+.header {
+    height: 20vh;
+    padding-top: 10vh;
+    font-size: 10vmin;
+    text-align: center;
+}
+
+.contents {
+    height: 80vh;
+    font-size: 5vmin;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.footer {
+    height: 5vh;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+}
+
+#version {
+    font-size: 2vh;
+}
+
+#options {
+    display: none;
+}
+
+#toggle-options {
+    margin-bottom: 2vh;
+}
+
+.option {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+input {
+    outline: none;
+    border: 2px solid white;
+    border-radius: 0.2em;
+    font-size: 5vmin;
+}
+
+input[type=text], input[type=password] {
+    height: 8vh;
+    padding: 0.5em;
+    background-color: transparent;
+    color: white;
+    width: 100%;
+    margin-top: 0.2em;
+    margin-bottom: 1em;
+    appearance: none;
+    -webkit-appearance: none;
+    background-clip: padding-box;
+}
+
+input[type=number] {
+    height: 6vh;
+    background-color: transparent;
+    color: white;
+    width: 25%;
+}
+
+input[type=checkbox] {
+    width: 4vmin;
+    height: 4vmin;
+    border-radius: 10%;
+}
+
+input[type=submit] {
+    margin-top: 4vh;
+    height: 8vh;
+    width: 100%;
+    background-color: white;
+    color: #302dd6;
+    -webkit-appearance: none;
+}
+
+input[type=submit]:active, input[type=submit]:focus {
+    background-color: #c7dafc;
+}
