@@ -55,6 +55,9 @@ function validatePassphrase(passphrase) {
         fingerprint === storedFingerprint);
 }
 
+// PROBLEM: Safari only allows clipboard writes inside a user event handler
+// and the promise resolve functions are not executed inside the event handler
+// so clipboard access is denied
 function copy() {
     const inputs = parseInputs();
     if (inputs.length < 6 || inputs.length > 80) {
