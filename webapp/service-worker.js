@@ -4,7 +4,7 @@ const CACHE_URLS = [
     'manifest.webmanifest',
     'icon.png',
     'index.html',
-    'entropass.css',
+    'style.css',
     'main.js',
     'service-worker.js',
     'lib/typedarrays.js',
