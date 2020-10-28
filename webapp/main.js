@@ -123,7 +123,7 @@ function updatePublicSuffixList() {
             console.log('Saving and loading latest public suffix list');
             localStorage.setItem('public-suffix-list', data);
             localStorage.setItem('public-suffix-list-timestamp', new Date());
-            loadPublicSuffixList(data);
+            window.loadPublicSuffixList(data);
         })
     }).catch(error => console.error('Public suffix list fetch failed:', error));
 }
