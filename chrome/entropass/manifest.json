@@ -3,9 +3,9 @@
   "description": "Open-source decentralized maximum-security password manager",
   "author": "Chris Clark",
   "homepage_url": "http://rampantlogic.com/entropass/",
-  "version": "2.1.0",
-  "manifest_version": 2,
-  "minimum_chrome_version": "26",
+  "version": "2.2.0",
+  "manifest_version": 3,
+  "minimum_chrome_version": "88",
   "options_page": "options.html",
   "icons": {
     "16": "images/icon_16.png",
@@ -13,17 +13,21 @@
     "128": "images/icon_128.png"
   },
   "background": {
-    "page": "background.html"
+    "service_worker": "background.js"
   },
-  "browser_action": {
+  "action": {
     "default_title": "Entropass",
     "default_icon": "images/icon_16.png",
     "default_popup": "popup.html"
   },
   "permissions": [
     "activeTab",
+    "offscreen",
+    "scripting",
     "storage",
-    "clipboardWrite",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
     "http://publicsuffix.org/list/effective_tld_names.dat"
   ]
 }

@@ -1,6 +1,9 @@
 // Any copyright is dedicated to the Public Domain.
 // http://creativecommons.org/publicdomain/zero/1.0/
 
+// TODO: get data
+loadPublicSuffixList(data);
+
 // null input.
 checkPublicSuffix(null, null);
 // Mixed case.

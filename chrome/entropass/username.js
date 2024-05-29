@@ -1,5 +1,4 @@
 
-
 function startsWith(string, prefixes) {
     for(var i = 0; i < prefixes.length; i++) {
         if(string.indexOf(prefixes[i]) === 0)
@@ -87,3 +86,5 @@ function getUsername() {
     }
     return stepBackwards(active);
 }
+
+getUsername();

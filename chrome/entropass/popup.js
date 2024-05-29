@@ -9,9 +9,7 @@ function toggle(id) {
 }
 
 function setClipboard(password) {
-    var cmd = 'setClipboard';
-    chrome.runtime.sendMessage({command: cmd, text: password});
-    chrome.runtime.sendMessage({command: cmd, text: ' ', delay: 10000});
+    chrome.runtime.sendMessage({command: 'setClipboard', text: password});
     window.close();
 }
 
@@ -27,22 +25,47 @@ function extractHost(url) {
 
 function withUsername(callback) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.executeScript(tabs[0].id, {file: 'username.js'}, function() {
-            chrome.tabs.executeScript(tabs[0].id, {
-                code: 'getUsername();'}, function(result) { callback(result[0]); }
-            );
-        });
+        chrome.scripting.executeScript(
+            {target: {tabId: tabs[0].id}, files: ['username.js']},
+            function(results) { callback(results[0].result); }
+        );
     });
+}
+
+function insertPasswordInTab(password) {
+    function insertPasswordAt(password, element) {
+        element.value = password;
+        setTimeout(function() { element.focus(); }, 10);
+        return true;
+    }
+
+    function insertionFailure(message) {
+        setTimeout(function() { alert(message); }, 10);
+        return false;
+    }
+
+    var active = document.activeElement;
+    if(active && active.nodeName.toLowerCase() === 'input' &&
+            active.type.toLowerCase() === 'password' &&
+            active.value === '') {
+        return insertPasswordAt(password, active);
+    }
+    var passwordFields = document.querySelectorAll('input[type="password"]');
+    if(passwordFields.length === 0) {
+        return insertionFailure('No password field found on this site');
+    }
+    for(var i = 0; i < passwordFields.length; i++) {
+        if(passwordFields[i].value === '')
+            return insertPasswordAt(password, passwordFields[i]);
+    }
+    return insertionFailure('No empty password field found on this site');
 }
 
 function insertPassword(password) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.executeScript(tabs[0].id, {file: 'insert.js'}, function() {
-            chrome.tabs.executeScript(tabs[0].id, {
-                code: 'insertPassword("' + password + '");'}, function() {
-                    window.close();
-            });
-        });
+        chrome.scripting.executeScript({target: {tabId: tabs[0].id},
+            func: insertPasswordInTab, args: [password]},
+                function() { window.close(); });
     });
 }
 

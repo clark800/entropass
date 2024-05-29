@@ -1,4 +1,6 @@
 
+importScripts('lib/punycode.js', 'lib/publicsuffix.js');
+
 var PSLKEY = 'publicSuffixList';
 var PSLDATEKEY = 'publicSuffixListLastUpdate';
 
@@ -7,24 +9,34 @@ function today() {
 }
 
 function setClipboard(text) {
-    clipboardHolder = document.getElementById('clipboardholder');
-    clipboardHolder.value = text;
-    clipboardHolder.select();
-    document.execCommand('Cut');
+  chrome.offscreen.createDocument({
+    url: 'offscreen.html',
+    reasons: [chrome.offscreen.Reason.CLIPBOARD],
+    justification: 'Write text to the clipboard.'
+  }).then(_ => {
+      chrome.runtime.sendMessage({
+        type: 'copy-data-to-clipboard',
+        target: 'offscreen-doc',
+        data: text
+      });
+  });
 }
 
+/*
+function setClipboard(text) {
+    // https://github.com/w3c/editing/issues/458
+    navigator.clipboard.clipboard.write(text);
+}
+*/
+
 function download(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.onreadystatechange = function() {
-        if(xhr.readyState === 4) {
-            if(xhr.status === 200 && xhr.responseText.length > 0)
-                callback(xhr.responseText);
-            else
-                console.log('Failed to update public suffix list');
+    fetch(url).then(response => {
+        if(response.status === 200) {
+            response.text().then(callback);
+        } else {
+            console.log('Failed to update public suffix list');
         }
-    };
-    xhr.send();
+    });
 }
 
 function pullPublicSuffixList(url, callback) {
@@ -54,7 +66,7 @@ function initPublicSuffixList() {
         if(items[PSLKEY]) {
             loadPublicSuffixList(items[PSLKEY]);
         } else {
-            var url = chrome.extension.getURL('data/effective_tld_names.dat');
+            var url = chrome.runtime.getURL('data/effective_tld_names.dat');
             pullPublicSuffixList(url);
         }
     });
@@ -68,10 +80,13 @@ function initPublicSuffixList() {
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if(request.command === 'setClipboard') {
-            var delay = request.delay ? request.delay : 0;
-            setTimeout(function() { setClipboard(request.text); }, delay);
+            setClipboard(request.text);
+            // clear clipboard after 10 seconds
+            // note: service workers live for 30 seconds after last activity
+            setTimeout(function() { setClipboard(' '); }, 10000);
         } else if(request.command === 'getDomain') {
-            sendResponse(getBaseDomainFromHost(request.host));
+            getBaseDomainFromHost(request.host).then(sendResponse);
+            return true; // keep connection open for async response
         }
     }
 );

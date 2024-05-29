@@ -2,7 +2,7 @@
 
 function get(id) { return document.getElementById(id); }
 
-function setValue(id, value) { 
+function setValue(id, value) {
     var element = get(id);
     var nodeName = element.nodeName.toLowerCase();
     var type = element.type ? element.type.toLowerCase() : null;

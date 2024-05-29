@@ -18,7 +18,7 @@ function PublicSuffixListParser(data) {
     }
 
     function getMatches(hostLabels, list) {
-        return list.filter(function(patternLabels) { 
+        return list.filter(function(patternLabels) {
             return isMatch(hostLabels, patternLabels);
         });
     }
@@ -57,7 +57,7 @@ function PublicSuffixListParser(data) {
     function parse(data) {
         var lines = data.split('\n');
         for(var i = 0; i < lines.length; i++) {
-            var rule = lines[i].split(/\s/)[0];            
+            var rule = lines[i].split(/\s/)[0];
             if(rule.length > 0 && rule.indexOf('//') !== 0) {
                 if(rule[0] === '!') {
                     exceptions.push(rule.slice(1).split('.'));
@@ -67,17 +67,30 @@ function PublicSuffixListParser(data) {
             }
         }
     }
-   
+
     parse(data);
 }
 
 function loadPublicSuffixList(data) {
-    var parser = new PublicSuffixListParser(data);
-    this.getBaseDomainFromHost = parser.getBaseDomainFromHost;
+    this.publicSuffixListParser = new PublicSuffixListParser(data);
+}
+
+function getBaseDomainFromHost(host) {
+    return new Promise((resolve, reject) => {
+        (function waitForParser() {
+            if (this.publicSuffixListParser) {
+                var parser = this.publicSuffixListParser;
+                var domain = parser.getBaseDomainFromHost(host);
+                return resolve(domain);
+            }
+            setTimeout(waitForParser, 5);
+        })();
+    });
 }
 
 function checkPublicSuffix(host, expectedBaseDomain) {
-    var baseDomain = getBaseDomainFromHost(host);
+    var parser = this.publicSuffixListParser;
+    var baseDomain = parser.getBaseDomainFromHost(host);
     var success = baseDomain === expectedBaseDomain;
     console.log((success ? 'PASS' : 'FAIL') + ' ' + host + ': ' +
                  baseDomain + ' vs '+ expectedBaseDomain);
