@@ -34,8 +34,9 @@ function withUsername(callback) {
 
 function insertPasswordInTab(password) {
     function insertPasswordAt(password, element) {
-        element.value = password;
-        setTimeout(function() { element.focus(); }, 10);
+        element.focus();
+        document.execCommand('selectAll', false, null);
+        document.execCommand('insertText', false, password);
         return true;
     }
 
