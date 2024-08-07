@@ -3,6 +3,7 @@ importScripts('lib/punycode.js', 'lib/publicsuffix.js');
 
 var PSLKEY = 'publicSuffixList';
 var PSLDATEKEY = 'publicSuffixListLastUpdate';
+var TIMEOUT_ID = undefined;
 
 function today() {
     return (new Date()).toJSON().slice(0, 10);
@@ -80,10 +81,11 @@ function initPublicSuffixList() {
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if(request.command === 'setClipboard') {
+            clearTimeout(TIMEOUT_ID);
             setClipboard(request.text);
             // clear clipboard after 10 seconds
             // note: service workers live for 30 seconds after last activity
-            setTimeout(function() { setClipboard(' '); }, 10000);
+            TIMEOUT_ID = setTimeout(function() { setClipboard(' '); }, 10000);
         } else if(request.command === 'getDomain') {
             getBaseDomainFromHost(request.host).then(sendResponse);
             return true; // keep connection open for async response

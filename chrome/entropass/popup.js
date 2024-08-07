@@ -162,9 +162,11 @@ function onCopyPassword() {
     event.preventDefault();
 }
 
-function loadAndShowSiteSettings(mapping, callback) {
-    withDomain(function(domain) {
-        loadAndShowSettings('site:' + domain, mapping, callback);
+function loadAndShowSiteSettings(domain, mapping, callback) {
+    loadAndShowSettings('site:' + domain, mapping, function(settings) {
+        if (get('domain').value === '')
+            setValue('domain', domain);
+        callback(settings);
     });
 }
 
@@ -185,9 +187,13 @@ function loadUsername(settings) {
 }
 
 function init() {
-    withDomain(function(domain) {setValue('domain', domain);});
-    loadAndShowSettings('global', {defaultPasswordLength: 'password-length'});
-    loadAndShowSiteSettings(SETTINGS, loadUsername);
+    setValue('domain', '');  // use domain field to determine if settings loaded
+    loadAndShowSettings('global', {defaultPasswordLength: 'password-length'},
+        function(settings) {
+            withDomain(function(domain) {
+                loadAndShowSiteSettings(domain, SETTINGS, loadUsername);
+            });
+        });
     on('generate-form', 'submit', onGeneratePassword);
     on('increment-reset-count', 'click', incrementResetCount);
     on('decrement-reset-count', 'click', decrementResetCount);
