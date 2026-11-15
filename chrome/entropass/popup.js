@@ -86,8 +86,12 @@ function decrementResetCount() {
 function withDomain(callback) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var host = extractHost(tabs[0].url);
-        var message = {command: 'getDomain', host: host};
-        chrome.runtime.sendMessage(message, callback);
+        if (host.split('.').length <= 2) {
+            callback(host.toLowerCase());   // support top-level domains
+        } else {
+            var message = {command: 'getDomain', host: host};
+            chrome.runtime.sendMessage(message, callback);
+        }
     });
 }
 
