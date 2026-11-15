@@ -25,10 +25,14 @@ function extractHost(url) {
 
 function withUsername(callback) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.scripting.executeScript(
-            {target: {tabId: tabs[0].id}, files: ['username.js']},
-            function(results) { callback(results[0].result); }
-        );
+        if (tabs[0].url.startsWith('chrome://')) {
+            callback('');
+        } else {
+            chrome.scripting.executeScript(
+                {target: {tabId: tabs[0].id}, files: ['username.js']},
+                function(results) { callback(results[0].result); }
+            );
+        }
     });
 }
 
@@ -96,18 +100,19 @@ function withDomain(callback) {
 }
 
 function saveSiteSettings(settings) {
+    var settingsToSave = Object.assign({}, settings);
     withDomain(function(domain) {
         // don't store default values to save space, no default for length
         if(settings.domain === domain)
-            delete settings.domain;
+            delete settingsToSave.domain;
         if(settings.resetCount === "0" || settings.resetCount === 0)
-            delete settings.resetCount;
+            delete settingsToSave.resetCount;
         if(settings.allowSymbols === true)
-            delete settings.allowSymbols;
+            delete settingsToSave.allowSymbols;
         if(settings.username === '')
-            delete settings.username;
-        settings.timestamp = Date.now();
-        saveSettings('site:' + domain, settings);
+            delete settingsToSave.username;
+        settingsToSave.timestamp = Date.now();
+        saveSettings('site:' + domain, settingsToSave);
     });
 }
 
