@@ -90,8 +90,8 @@ function decrementResetCount() {
 function withDomain(callback) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var host = extractHost(tabs[0].url);
-        if (host.split('.').length <= 2) {
-            callback(host.toLowerCase());   // support top-level domains
+        if (host.split('.').length <= 2 || /^[0-9.]+$/.test(host)) {
+            callback(host.toLowerCase()); // support top-level domains and IPv4
         } else {
             var message = {command: 'getDomain', host: host};
             chrome.runtime.sendMessage(message, callback);
